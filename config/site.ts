@@ -3,7 +3,7 @@ export const siteConfig = {
   fullName: "Aastha Multi Speciality Hospital",
   tagline: "Advanced Care, Amidst the Mountains.",
   description:
-    "Aastha Multi Speciality Hospital brings world-class medical care to the hills — expert specialists, modern facilities, and compassionate service for the people of Himachal Pradesh.",
+    "Aastha Multi Speciality Hospital brings world-class medical care to the hills ï¿½ expert specialists, modern facilities, and compassionate service for the people of Himachal Pradesh.",
   phone: "+91 98885 45809",
   emergency: "1066",
   emergencyFull: "+91 98765 11066",
@@ -11,14 +11,14 @@ export const siteConfig = {
   email: "care@Aasthahospital.in",
   address: {
     line1: "Ridge Road, Tutu, Shimla",
-    line2: "Himachal Pradesh — 171011",
+    line2: "Himachal Pradesh ï¿½ 171011",
   },
   hours: {
     opd: {
-      days: [1, 2, 3, 4, 5, 6], // Mon–Sat
+      days: [1, 2, 3, 4, 5, 6], // Monï¿½Sat
       startHour: 8,
       endHour: 20,
-      label: "Mon–Sat · 8 AM – 8 PM",
+      label: "Monï¿½Sat ï¿½ 8 AM ï¿½ 8 PM",
     },
     emergency: "24 / 7 / 365",
   },
@@ -45,7 +45,7 @@ export const siteConfig = {
     { icon: "blood", label: "Blood Bank", href: "/services/blood-bank" },
     { icon: "pill", label: "Pharmacy", href: "/services/pharmacy" },
   ],
-  // Wave shape per line i: M 0 (yStart+i×ySpacing) Q cp1x (cp1y+i×ySpacing) cp2x (cp2y+i×ySpacing) T endX (endY+i×ySpacing)
+  // Wave shape per line i: M 0 (yStart+iï¿½ySpacing) Q cp1x (cp1y+iï¿½ySpacing) cp2x (cp2y+iï¿½ySpacing) T endX (endY+iï¿½ySpacing)
   topoLines: {
     color: "#0D9488",
     sizes: {

@@ -134,7 +134,7 @@ export default function BookAppointment() {
             </div>
           </div>
 
-          {/* Right — form */}
+          {/* Right ï¿½ form */}
           <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(12,35,64,.04),0_4px_16px_rgba(12,35,64,.04)]">
             {submitted ? (
               <div className="flex flex-col items-center text-center py-10 px-5">
@@ -145,7 +145,7 @@ export default function BookAppointment() {
                   Appointment Requested!
                 </h3>
                 <p className="mt-2.5 text-slate-600 max-w-sm">
-                  Thanks {form.name.split(" ")[0]} — our team will confirm via
+                  Thanks {form.name.split(" ")[0]} ï¿½ our team will confirm via
                   WhatsApp on +91 {form.phone} within 30 minutes.
                 </p>
                 <button
@@ -172,7 +172,7 @@ export default function BookAppointment() {
                   Patient Details
                 </h3>
                 <p className="text-[13px] text-slate-500 mt-1 mb-5">
-                  Fill in the basics — we'll handle the rest.
+                  Fill in the basics ï¿½ we'll handle the rest.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
@@ -202,7 +202,7 @@ export default function BookAppointment() {
                       value={form.dept}
                       onChange={(v) => update("dept", v)}
                       hasError={!!errors.dept}
-                      placeholder="Choose department…"
+                      placeholder="Choose departmentï¿½"
                       options={deptOptions}
                     />
                   </FormField>
