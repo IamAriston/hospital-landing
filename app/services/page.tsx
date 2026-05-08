@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Icon from "@/components/ui/Icon";
 import type { IconName } from "@/components/ui/Icon";
 import PageHero from "@/components/ui/PageHero";
@@ -6,8 +6,8 @@ import { homeConfig } from "@/config/home";
 import { serviceAccentIcon } from "@/config/services";
 
 export const metadata: Metadata = {
-  title: "Services — Astha Multi Speciality Hospital",
-  description: "Comprehensive healthcare services at Astha Hospital: emergency, OPD, diagnostics, pharmacy, blood bank and homecare.",
+  title: "Services — Aastha Multi Speciality Hospital",
+  description: "Comprehensive healthcare services at Aastha Hospital: emergency, OPD, diagnostics, pharmacy, blood bank and homecare.",
 };
 
 export default function ServicesPage() {

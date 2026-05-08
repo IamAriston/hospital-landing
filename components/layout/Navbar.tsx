@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -81,7 +81,7 @@ export default function Navbar() {
           </div>
           <div className="flex flex-col leading-[1.05]">
             <span className="text-teal-600 font-extrabold text-[22px] font-display tracking-tight">
-              Astha
+              Aastha
             </span>
             <span className="text-navy text-[11px] font-medium uppercase tracking-[0.12em] mt-0.5">
               Multi Speciality Hospital

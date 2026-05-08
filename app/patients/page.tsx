@@ -6,8 +6,8 @@ import PageHero from "@/components/ui/PageHero";
 import { patientLinks, insurancePartners, prepareChecklist } from "@/config/patients";
 
 export const metadata: Metadata = {
-  title: "Patient Information â€” Astha Multi Speciality Hospital",
-  description: "Book appointments, view OPD schedules, access lab reports, insurance info and more at Astha Hospital.",
+  title: "Patient Information — AAastha Multi Speciality Hospital",
+  description: "Book appointments, view OPD schedules, access lab reports, insurance info and more at AAastha Hospital.",
 };
 
 export default function PatientsPage() {
@@ -16,7 +16,7 @@ export default function PatientsPage() {
       <PageHero
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Patients" }]}
         title="Patient Information"
-        subtitle="Everything you need before, during, and after your visit â€” appointments, reports, insurance, and more."
+        subtitle="Everything you need before, during, and after your visit — appointments, reports, insurance, and more."
       />
 
       <div className="bg-cream">
@@ -66,7 +66,7 @@ export default function PatientsPage() {
                   ))}
                 </div>
                 <p className="mt-4 text-[13px] text-slate-400 italic">
-                  Don&apos;t see your insurer? Call us â€” we may still be able to assist with reimbursement claims.
+                  Don&apos;t see your insurer? Call us — we may still be able to assist with reimbursement claims.
                 </p>
               </div>
 
@@ -89,21 +89,21 @@ export default function PatientsPage() {
                 <div className="bg-white border border-slate-200 rounded-2xl p-6">
                   <h3 className="font-bold text-navy font-display text-[16px] mb-3">Visitor Policy</h3>
                   <div className="flex flex-col gap-2.5 text-[13.5px] text-slate-600">
-                    <p>â€¢ Visiting hours: <strong className="text-navy">10 AM â€“ 12 PM &amp; 5 PM â€“ 7 PM</strong></p>
-                    <p>â€¢ Maximum <strong className="text-navy">2 visitors</strong> per patient at any time</p>
-                    <p>â€¢ ICU / NICU visitors by <strong className="text-navy">prior permission</strong> only</p>
-                    <p>â€¢ Children under 12 discouraged in inpatient wards</p>
-                    <p>â€¢ Masks are compulsory in ICU and operation areas</p>
+                    <p>• Visiting hours: <strong className="text-navy">10 AM – 12 PM &amp; 5 PM – 7 PM</strong></p>
+                    <p>• Maximum <strong className="text-navy">2 visitors</strong> per patient at any time</p>
+                    <p>• ICU / NICU visitors by <strong className="text-navy">prior permission</strong> only</p>
+                    <p>• Children under 12 discouraged in inpatient wards</p>
+                    <p>• Masks are compulsory in ICU and operation areas</p>
                   </div>
                 </div>
 
                 <div className="bg-white border border-slate-200 rounded-2xl p-6">
                   <h3 className="font-bold text-navy font-display text-[16px] mb-3">Patient Rights</h3>
                   <div className="flex flex-col gap-2 text-[13.5px] text-slate-600">
-                    <p>â€¢ Right to transparent information on diagnosis and treatment</p>
-                    <p>â€¢ Right to a second opinion from any specialist</p>
-                    <p>â€¢ Right to confidentiality of medical records</p>
-                    <p>â€¢ Right to a detailed itemised bill at discharge</p>
+                    <p>• Right to transparent information on diagnosis and treatment</p>
+                    <p>• Right to a second opinion from any specialist</p>
+                    <p>• Right to confidentiality of medical records</p>
+                    <p>• Right to a detailed itemised bill at discharge</p>
                   </div>
                 </div>
               </div>

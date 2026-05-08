@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import { siteConfig } from "@/config/site";
 import type { IconName } from "@/components/ui/Icon";
@@ -17,7 +17,7 @@ export default function Footer() {
               </div>
               <div>
                 <div className="text-white font-extrabold text-[22px] font-display tracking-tight">
-                  Astha
+                  Aastha
                 </div>
                 <div className="text-slate-400 text-[11px] uppercase tracking-[0.12em]">
                   Multi Speciality Hospital

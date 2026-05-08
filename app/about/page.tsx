@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Icon from "@/components/ui/Icon";
@@ -13,9 +13,9 @@ import { siteConfig } from "@/config/site";
 import { infra, keyTechnologies, accreditations, milestones, leadership } from "@/config/about";
 
 export const metadata: Metadata = {
-  title: "About Us — Astha Multi Speciality Hospital",
+  title: "About Us — Aastha Multi Speciality Hospital",
   description:
-    "Learn about Astha Multi Speciality Hospital — Himachal Pradesh's most modern hospital, built to serve the hills.",
+    "Learn about Aastha Multi Speciality Hospital — Himachal Pradesh's most modern hospital, built to serve the hills.",
 };
 
 export default function AboutPage() {
@@ -23,7 +23,7 @@ export default function AboutPage() {
     <>
       <PageHero
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
-        title="About Astha Hospital"
+        title="About Aastha Hospital"
         subtitle="Himachal Pradesh's most modern multi-speciality hospital — built from the ground up to bring world-class healthcare to the hills."
       />
 
@@ -39,7 +39,7 @@ export default function AboutPage() {
                   heading="World-Class Care at the Heart of the Himalayas"
                 />
                 <p className="mt-5 text-[16px] text-slate-600 leading-relaxed">
-                  Astha Multi Speciality Hospital was born from a simple truth:
+                  Aastha Multi Speciality Hospital was born from a simple truth:
                   the people of Himachal Pradesh deserve healthcare that
                   doesn&apos;t require a 5-hour journey to Delhi or Chandigarh.
                 </p>
@@ -62,7 +62,7 @@ export default function AboutPage() {
               <div className="rounded-2xl overflow-hidden border border-[#EDE5D5] aspect-4/3 shadow-[0_20px_60px_-20px_rgba(12,35,64,.2)]">
                 <Image
                   src="/assets/building-wide.png"
-                  alt="Astha Hospital exterior"
+                  alt="Aastha Hospital exterior"
                   width={720}
                   height={540}
                   className="w-full h-full object-cover"
@@ -179,7 +179,7 @@ export default function AboutPage() {
         <section className="py-12 sm:py-16 border-t border-[#E7DFCF]">
           <div className="max-w-7xl mx-auto px-5 sm:px-8">
             <CTABanner
-              title="Visit Astha Hospital"
+              title="Visit Aastha Hospital"
               body={`${siteConfig.address.line1}, ${siteConfig.address.line2}`}
             >
               <Link

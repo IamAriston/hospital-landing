@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import type { IconName } from "@/components/ui/Icon";
@@ -7,8 +7,8 @@ import CTABanner from "@/components/ui/CTABanner";
 import { homeConfig } from "@/config/home";
 
 export const metadata: Metadata = {
-  title: "Departments — Astha Multi Speciality Hospital",
-  description: "Explore all 22 speciality departments at Astha Multi Speciality Hospital, Himachal Pradesh.",
+  title: "Departments — Aastha Multi Speciality Hospital",
+  description: "Explore all 22 speciality departments at Aastha Multi Speciality Hospital, Himachal Pradesh.",
 };
 
 export default function DepartmentsPage() {

@@ -113,7 +113,7 @@ export default function BookAppointment() {
                   className="text-teal-600"
                 />
                 <span className="font-display font-bold text-[24px] text-teal-600">
-                  +91 98765 43210
+                  +91 98885 45809
                 </span>
               </div>
               <button className="mt-3.5 w-full inline-flex items-center justify-center gap-2 py-3 rounded-[10px] bg-whatsapp text-white font-semibold text-sm font-display hover:bg-[#1a8c3a] transition-colors">
@@ -126,7 +126,7 @@ export default function BookAppointment() {
             <div className="mt-6 rounded-2xl overflow-hidden border border-[#EDE5D5] aspect-16/10">
               <Image
                 src={booking.image}
-                alt="Astha Hospital building"
+                alt="Aastha Hospital building"
                 width={600}
                 height={375}
                 className="w-full h-full object-cover"
@@ -134,7 +134,7 @@ export default function BookAppointment() {
             </div>
           </div>
 
-          {/* Right â€” form */}
+          {/* Right — form */}
           <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(12,35,64,.04),0_4px_16px_rgba(12,35,64,.04)]">
             {submitted ? (
               <div className="flex flex-col items-center text-center py-10 px-5">
@@ -145,7 +145,7 @@ export default function BookAppointment() {
                   Appointment Requested!
                 </h3>
                 <p className="mt-2.5 text-slate-600 max-w-sm">
-                  Thanks {form.name.split(" ")[0]} â€” our team will confirm via
+                  Thanks {form.name.split(" ")[0]} — our team will confirm via
                   WhatsApp on +91 {form.phone} within 30 minutes.
                 </p>
                 <button
@@ -172,7 +172,7 @@ export default function BookAppointment() {
                   Patient Details
                 </h3>
                 <p className="text-[13px] text-slate-500 mt-1 mb-5">
-                  Fill in the basics â€” we'll handle the rest.
+                  Fill in the basics — we'll handle the rest.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
@@ -187,7 +187,7 @@ export default function BookAppointment() {
                   <FormField label="Phone (+91)" error={errors.phone}>
                     <TextField
                       type="tel"
-                      placeholder="98765 43210"
+                      placeholder="98885 45809"
                       value={form.phone}
                       onChange={(e) => update("phone", e.target.value)}
                       hasError={!!errors.phone}
@@ -202,7 +202,7 @@ export default function BookAppointment() {
                       value={form.dept}
                       onChange={(v) => update("dept", v)}
                       hasError={!!errors.dept}
-                      placeholder="Choose departmentâ€¦"
+                      placeholder="Choose department…"
                       options={deptOptions}
                     />
                   </FormField>

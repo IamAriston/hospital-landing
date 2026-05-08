@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import PageHero from "@/components/ui/PageHero";
@@ -7,8 +7,8 @@ import { siteConfig } from "@/config/site";
 import { directions } from "@/config/contact";
 
 export const metadata: Metadata = {
-  title: "Contact — Astha Multi Speciality Hospital",
-  description: "Contact Astha Multi Speciality Hospital — phone, WhatsApp, email, or visit us in Shimla, Himachal Pradesh.",
+  title: "Contact — Aastha Multi Speciality Hospital",
+  description: "Contact Aastha Multi Speciality Hospital — phone, WhatsApp, email, or visit us in Shimla, Himachal Pradesh.",
 };
 
 export default function ContactPage() {

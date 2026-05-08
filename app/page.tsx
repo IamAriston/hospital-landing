@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import StatsBand from "@/components/sections/StatsBand";
 import FeatureCards from "@/components/sections/FeatureCards";
 import Departments from "@/components/sections/Departments";
-import WhyAstha from "@/components/sections/WhyAstha";
+import WhyAastha from "@/components/sections/WhyAastha";
 import DoctorsSection from "@/components/sections/DoctorsSection";
 import BookAppointment from "@/components/sections/BookAppointment";
 import Testimonials from "@/components/sections/Testimonials";
@@ -25,7 +25,7 @@ export default function HomePage() {
       {sections.stats && <StatsBand />}
       {sections.features && <FeatureCards />}
       {sections.departments && <Departments />}
-      {sections.whyUs && <WhyAstha />}
+      {sections.whyUs && <WhyAastha />}
       {sections.doctors && <DoctorsSection />}
       {sections.booking && <BookAppointment />}
       {sections.testimonials && <Testimonials />}

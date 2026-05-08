@@ -23,8 +23,8 @@ export async function generateMetadata({
   const dept = homeConfig.departments.find((d) => d.slug === slug);
   if (!dept) return {};
   return {
-    title: `${dept.name} — Astha Multi Speciality Hospital`,
-    description: `${dept.name} at Astha Hospital, Shimla: ${dept.desc}`,
+    title: `${dept.name} — Aastha Multi Speciality Hospital`,
+    description: `${dept.name} at Aastha Hospital, Shimla: ${dept.desc}`,
   };
 }
 
@@ -128,7 +128,7 @@ export default async function DepartmentPage({
             {deptDoctors.length > 0 && (
               <div>
                 <h2 className="mb-5 text-xl font-extrabold text-navy font-display">
-                  {dept.name} Specialists at Astha
+                  {dept.name} Specialists at Aastha
                 </h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   {deptDoctors.map((doc) => {

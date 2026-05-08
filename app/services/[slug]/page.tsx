@@ -22,7 +22,7 @@ export async function generateMetadata({
   const svc = homeConfig.features.find((f) => f.slug === slug);
   if (!svc) return {};
   return {
-    title: `${svc.name} — Astha Multi Speciality Hospital`,
+    title: `${svc.name} — Aastha Multi Speciality Hospital`,
     description: svc.desc,
   };
 }
@@ -76,7 +76,7 @@ export default async function ServicePage({
           <div className="bg-white border border-slate-200 rounded-2xl p-7">
             <h2 className="text-xl font-extrabold text-navy font-display mb-4">About This Service</h2>
             <p className="text-[15px] text-slate-600 leading-relaxed mb-6">
-              {svc.desc} Astha Multi Speciality Hospital provides this service
+              {svc.desc} Aastha Multi Speciality Hospital provides this service
               round the clock with trained professionals and modern equipment to
               ensure the best care for patients across Himachal Pradesh.
             </p>

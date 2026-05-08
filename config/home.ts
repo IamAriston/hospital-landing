@@ -1,4 +1,4 @@
-export const homeConfig = {
+﻿export const homeConfig = {
   sections: {
     hero: true,
     stats: true,
@@ -14,7 +14,7 @@ export const homeConfig = {
 
   meta: {
     title:
-      "Astha Multi Speciality Hospital — Advanced Care, Amidst the Mountains",
+      "Aastha Multi Speciality Hospital — Advanced Care, Amidst the Mountains",
     description:
       "World-class medical care in Himachal Pradesh. Expert specialists, modern facilities, and compassionate service.",
   },
@@ -25,7 +25,7 @@ export const homeConfig = {
     pill: "Himachal Pradesh's Newest Multi-Speciality Hospital",
     headline: ["Advanced Healthcare,", "Amidst the Mountains."],
     headlineAccent: "Amidst the Mountains.",
-    body: "Astha Multi Speciality Hospital brings world-class medical care to the hills — expert specialists, modern facilities, and compassionate service for the people of Himachal Pradesh.",
+    body: "Aastha Multi Speciality Hospital brings world-class medical care to the hills — expert specialists, modern facilities, and compassionate service for the people of Himachal Pradesh.",
     trustPoints: [
       "Multi-Speciality Care",
       "24/7 Emergency",
@@ -111,8 +111,8 @@ export const homeConfig = {
   ],
 
   whyUs: {
-    pill: "Why Astha",
-    headline: "Why Astha Multi Speciality Hospital?",
+    pill: "Why Aastha",
+    headline: "Why Aastha Multi Speciality Hospital?",
     body: "A brand new hospital built for the future of healthcare in Himachal Pradesh — where modern medicine meets the warmth of the mountains.",
     image: "/assets/interior-blue.png",
     imageCaption: {
@@ -225,7 +225,7 @@ export const homeConfig = {
     {
       name: "Priya Devi",
       treatment: "Maternity Care",
-      text: "Welcomed our daughter at Astha — the gynae team and nurses made what could have been scary feel safe and warm. Forever grateful.",
+      text: "Welcomed our daughter at Aastha — the gynae team and nurses made what could have been scary feel safe and warm. Forever grateful.",
       initial: "PD",
     },
     {

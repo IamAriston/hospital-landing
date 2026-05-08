@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -32,7 +32,7 @@ export default function Preloader() {
         </div>
         <div className="text-center">
           <div className="text-navy font-bold text-xl font-display tracking-tight">
-            Astha
+            Aastha
           </div>
           <div className="text-slate-500 text-[11px] font-medium uppercase tracking-widest mt-0.5">
             Multi Speciality Hospital

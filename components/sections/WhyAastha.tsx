@@ -1,10 +1,10 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Icon from "@/components/ui/Icon";
 import Pill from "@/components/ui/Pill";
 import { homeConfig } from "@/config/home";
 import type { IconName } from "@/components/ui/Icon";
 
-export default function WhyAstha() {
+export default function WhyAastha() {
   const { whyUs } = homeConfig;
 
   return (
@@ -52,7 +52,7 @@ export default function WhyAstha() {
           <div className="relative rounded-2xl overflow-hidden border border-white/10 min-h-85 lg:min-h-110">
             <Image
               src={whyUs.image}
-              alt="Astha hospital interior"
+              alt="Aastha hospital interior"
               fill
               className="object-cover"
               style={{ filter: "saturate(1.05)" }}

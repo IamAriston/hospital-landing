@@ -114,11 +114,11 @@ export default function DoctorsPage() {
                 </p>
               </div>
               <a
-                href="tel:+919876543210"
+                href="tel:+919888545809"
                 className="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] bg-teal-600 text-white font-semibold font-display hover:bg-teal-700 transition-colors text-[15px]"
               >
                 <Icon name="phone" size={16} stroke={2} />
-                +91 98765 43210
+                +91 98885 45809
               </a>
             </div>
 
