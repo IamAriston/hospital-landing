@@ -47,8 +47,8 @@ export const milestones = [
 ];
 
 export const leadership = [
-  { name: "Dr. R.K. Sharma", role: "Medical Director", initial: "RK", tone: "#DBEAFE" },
-  { name: "Dr. Sanjay Rana", role: "Chief of Medicine", initial: "SR", tone: "#DCFCE7" },
-  { name: "Dr. Anjali Sharma", role: "Head of Cardiology", initial: "AS", tone: "#FCE7F3" },
-  { name: "Mr. Vikram Singh", role: "CEO & Hospital Administrator", initial: "VS", tone: "#FEF3C7" },
+  { name: "Dr. R.K. Sharma", role: "Medical Director", initial: "RK", tone: "bg-blue-100" },
+  { name: "Dr. Sanjay Rana", role: "Chief of Medicine", initial: "SR", tone: "bg-green-100" },
+  { name: "Dr. Anjali Sharma", role: "Head of Cardiology", initial: "AS", tone: "bg-pink-100" },
+  { name: "Mr. Vikram Singh", role: "CEO & Hospital Administrator", initial: "VS", tone: "bg-amber-100" },
 ];

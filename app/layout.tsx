@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter, Outfit } from "next/font/google";
+import { AppToaster } from "@/components/ui/app-toaster";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import UtilityBar from "@/components/layout/UtilityBar";
-import QuickAccess from "@/components/layout/QuickAccess";
-import Footer from "@/components/layout/Footer";
-import MobileBottomBar from "@/components/layout/MobileBottomBar";
-import Preloader from "@/components/preloader/Preloader";
-import RouteProgress from "@/components/preloader/RouteProgress";
 import { siteConfig } from "@/config/site";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -24,6 +18,13 @@ const inter = Inter({
   display: "swap",
 });
 
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: siteConfig.fullName,
   description: siteConfig.description,
@@ -35,16 +36,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} ${inter.variable}`}>
-      <body className="min-h-screen flex flex-col bg-white text-navy antialiased pb-16 lg:pb-0">
-        <Preloader />
-        <RouteProgress />
-        <UtilityBar />
-        <Navbar />
-        <QuickAccess />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <MobileBottomBar />
+    <html
+      lang="en"
+      className={`${plusJakarta.variable} ${inter.variable} ${outfit.variable}`}
+    >
+      <body className="min-h-screen antialiased">
+        {children}
+        <AppToaster />
       </body>
     </html>
   );

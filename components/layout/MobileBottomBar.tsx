@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Icon from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
-import { siteConfig } from "@/config/site";
 
 export default function MobileBottomBar() {
   const pathname = usePathname();
@@ -18,7 +17,7 @@ export default function MobileBottomBar() {
   };
 
   return (
-    <div className="fixed left-0 right-0 bottom-0 z-[60] bg-white border-t-[3px] border-teal-600 lg:hidden shadow-[0_-4px_20px_rgba(12,35,64,.08)]">
+    <div className="fixed left-0 right-0 bottom-0 z-[60] bg-white border-t-[3px] border-teal-600 lg:hidden shadow-mobile-bar">
       <div className="grid grid-cols-4">
         <Link
           href="/"
@@ -44,19 +43,22 @@ export default function MobileBottomBar() {
 
         <button
           onClick={scrollToBook}
-          className="flex flex-col items-center gap-1 py-2.5 bg-sky-400 text-[#04293F]"
+          className="flex flex-col items-center gap-1 py-2.5 bg-sky-400 text-sky-ink"
         >
           <Icon name="calendar" size={22} stroke={1.8} />
           <span className="text-[11px] font-semibold font-display">Book</span>
         </button>
 
-        <a
-          href={`tel:${siteConfig.phone}`}
-          className="flex flex-col items-center gap-1 py-2.5 text-navy"
+        <Link
+          href="/contact"
+          className={cn(
+            "flex flex-col items-center gap-1 py-2.5",
+            pathname === "/contact" ? "text-teal-600" : "text-navy",
+          )}
         >
-          <Icon name="phone" size={22} stroke={1.8} />
-          <span className="text-[11px] font-semibold font-display">Call</span>
-        </a>
+          <Icon name="mail" size={22} stroke={1.8} />
+          <span className="text-[11px] font-semibold font-display">Contact</span>
+        </Link>
       </div>
     </div>
   );

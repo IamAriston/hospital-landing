@@ -83,7 +83,7 @@ export default function DateField({ value, onChange, hasError, className }: Date
           "flex items-center gap-2.5 transition-[border-color,box-shadow] duration-150",
           "hover:border-slate-400",
           hasError ? "border-red-400 bg-red-50/40" : "border-slate-300",
-          open && "border-sky-500 shadow-[0_0_0_3px_rgba(14,165,233,.15)]",
+          open && "border-sky-500 shadow-input-focus",
         )}
       >
         <Icon name="calendar" size={15} stroke={2} className="text-slate-400 shrink-0" />
@@ -100,7 +100,7 @@ export default function DateField({ value, onChange, hasError, className }: Date
 
       {/* Calendar dropdown */}
       {open && (
-        <div className="absolute z-50 mt-1.5 w-full min-w-[280px] bg-white border border-slate-200 rounded-xl shadow-[0_12px_40px_-10px_rgba(12,35,64,.18)] p-4">
+        <div className="absolute z-50 mt-1.5 w-full min-w-[280px] bg-white border border-slate-200 rounded-xl shadow-popover p-4">
           {/* Month navigation */}
           <div className="flex items-center justify-between mb-3">
             <button

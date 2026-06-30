@@ -5,9 +5,9 @@ export const doctorInfoPoints = [
     body: "Most specialties offer same-day or next-day slots for non-emergency consultations.",
   },
   {
-    icon: "chat",
-    title: "WhatsApp Confirmation",
-    body: "After booking, you receive a WhatsApp confirmation with doctor name, time, and OPD number.",
+    icon: "check",
+    title: "Booking Confirmation",
+    body: "After booking, you receive a confirmation with doctor name, time, and OPD number within 30 minutes.",
   },
   {
     icon: "shield",

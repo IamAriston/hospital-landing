@@ -1,7 +1,7 @@
 ﻿import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import { siteConfig } from "@/config/site";
-import type { IconName } from "@/components/ui/Icon";
+import { footerPatientLinks } from "@/config/patients";
 
 export default function Footer() {
   return (
@@ -29,7 +29,7 @@ export default function Footer() {
               the people of Himachal Pradesh.
             </p>
             <div className="flex gap-2 mt-5">
-              {(["facebook", "instagram", "whatsapp", "twitter"] as const).map((s) => (
+              {(["facebook", "instagram", "twitter"] as const).map((s) => (
                 <a
                   key={s}
                   href={siteConfig.social[s]}
@@ -41,7 +41,7 @@ export default function Footer() {
               ))}
             </div>
             {/* App store buttons */}
-            <div className="flex gap-2.5 mt-6">
+            {/* <div className="flex gap-2.5 mt-6">
               {[
                 { icon: "apple" as const, top: "Download on", bottom: "App Store" },
                 { icon: "play2" as const, top: "Get it on", bottom: "Google Play" },
@@ -58,12 +58,12 @@ export default function Footer() {
                   </div>
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Quick links */}
           <FooterColumn title="Quick Links" items={siteConfig.footerLinks.quick} />
-          <FooterColumn title="Patient Services" items={siteConfig.footerLinks.patient} />
+          <FooterColumn title="Patient Services" items={footerPatientLinks} />
 
           {/* Contact */}
           <div>
@@ -78,12 +78,6 @@ export default function Footer() {
                   <br />
                   {siteConfig.address.line2}
                 </span>
-              </li>
-              <li className="flex gap-2.5 items-center">
-                <Icon name="phone" size={16} stroke={1.8} className="text-sky-300" />
-                <a href={`tel:${siteConfig.phone}`} className="text-sm text-sky-300 font-semibold hover:text-sky-200 transition-colors">
-                  {siteConfig.phone}
-                </a>
               </li>
               <li className="flex gap-2.5 items-center">
                 <Icon name="ambulance" size={16} stroke={1.8} className="text-red-300" />

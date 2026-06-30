@@ -6,13 +6,13 @@ Marketing and information website for **Aastha Multi Speciality Hospital**, Shim
 
 ## Tech Stack
 
-| Layer | Choice |
-|-------|--------|
-| Framework | Next.js 16.2 (App Router, static export) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v4 (`@import "tailwindcss"` + `@theme inline`) |
-| Fonts | Inter (body) + Urbanist (display, `font-display`) |
-| Icons | Custom Lucide-based `<Icon>` component |
+| Layer     | Choice                                                      |
+| --------- | ----------------------------------------------------------- |
+| Framework | Next.js 16.2 (App Router, static export)                    |
+| Language  | TypeScript                                                  |
+| Styling   | Tailwind CSS v4 (`@import "tailwindcss"` + `@theme inline`) |
+| Fonts     | Inter (body) + Urbanist (display, `font-display`)           |
+| Icons     | Custom Lucide-based `<Icon>` component                      |
 
 ---
 
@@ -81,13 +81,17 @@ Update here for: phone number, emergency number, WhatsApp, email, address, OPD h
 export const siteConfig = {
   phone: "+91 12345 67890",
   emergency: "1066",
-  address: { line1: "Ridge Road, Tutu, Shimla", line2: "Himachal Pradesh � 171011" },
+  address: {
+    line1:
+      "AASTHA HOSPITAL COMPLEX, NEEL TARA PARIMAHAL ENCLAVE, PANTHAGHATI, KASUMPTI",
+    line2: "Shimla, Himachal Pradesh 171009",
+  },
   hours: {
     opd: {
-      days: [1, 2, 3, 4, 5, 6],  // Mon�Sat (0=Sun�6=Sat)
+      days: [1, 2, 3, 4, 5, 6], // Mon�Sat (0=Sun�6=Sat)
       startHour: 8,
       endHour: 20,
-      label: "Mon�Sat � 8 AM � 8 PM",  // displayed in footer / OPD badge
+      label: "Mon-Sat / 8 AM - 8 PM", // displayed in footer / OPD badge
     },
     emergency: "24 / 7 / 365",
   },
@@ -118,6 +122,7 @@ This is the main data file. It drives the home page **and** populates the depart
 ```
 
 The doctor will automatically appear on:
+
 - The home page doctors section
 - `/doctors` listing page
 - The relevant `/departments/[slug]` page (matched by `dept`)
@@ -179,13 +184,13 @@ opd: { days: [1, 3, 5], startHour: 9, endHour: 14 }
 
 ### `config/about.ts` � About page content
 
-| Export | What it controls |
-|--------|-----------------|
-| `infra` | Infrastructure stat cards (beds, OTs, ICU, etc.) |
-| `keyTechnologies` | Equipment checklist |
-| `accreditations` | Certification cards |
-| `milestones` | Timeline of hospital milestones (`{ year, event }`) |
-| `leadership` | Leadership team cards (`{ name, role, initial, tone }`) |
+| Export            | What it controls                                        |
+| ----------------- | ------------------------------------------------------- |
+| `infra`           | Infrastructure stat cards (beds, OTs, ICU, etc.)        |
+| `keyTechnologies` | Equipment checklist                                     |
+| `accreditations`  | Certification cards                                     |
+| `milestones`      | Timeline of hospital milestones (`{ year, event }`)     |
+| `leadership`      | Leadership team cards (`{ name, role, initial, tone }`) |
 
 ---
 
@@ -193,7 +198,12 @@ opd: { days: [1, 3, 5], startHour: 9, endHour: 14 }
 
 ```ts
 export const directions = [
-  { from: "Shimla Bus Stand", distance: "3 km", time: "10 min", via: "Cart Rd" },
+  {
+    from: "Shimla Bus Stand",
+    distance: "3 km",
+    time: "10 min",
+    via: "Cart Rd",
+  },
   // ...
 ];
 ```
@@ -202,11 +212,11 @@ export const directions = [
 
 ### `config/patients.ts` � Patient info page
 
-| Export | What it controls |
-|--------|-----------------|
-| `patientLinks` | Quick-link cards at the top of the patients page |
-| `insurancePartners` | List of insurance / TPA partner names |
-| `prepareChecklist` | "What to Bring" list items |
+| Export              | What it controls                                 |
+| ------------------- | ------------------------------------------------ |
+| `patientLinks`      | Quick-link cards at the top of the patients page |
+| `insurancePartners` | List of insurance / TPA partner names            |
+| `prepareChecklist`  | "What to Bring" list items                       |
 
 ---
 
@@ -216,15 +226,15 @@ All date and time logic is centralised here. No page hard-codes an availability 
 
 ```ts
 type Schedule = {
-  days: number[];     // 0=Sun, 1=Mon, �, 6=Sat
-  startHour: number;  // 24-h start, e.g. 9
-  endHour: number;    // 24-h end (exclusive), e.g. 14
+  days: number[]; // 0=Sun, 1=Mon, �, 6=Sat
+  startHour: number; // 24-h start, e.g. 9
+  endHour: number; // 24-h end (exclusive), e.g. 14
 };
 
-formatOpd(s)          // ? "Mon, Wed, Fri � 9 AM to 2 PM"
-isOpenNow(s)          // ? true if current day+time falls within schedule
-isAvailableToday(s)   // ? true if today is in s.days (regardless of hour)
-availabilityLabel(s)  // ? "Available Today" | "Next: Wednesday" | "By Appointment"
+formatOpd(s); // ? "Mon, Wed, Fri � 9 AM to 2 PM"
+isOpenNow(s); // ? true if current day+time falls within schedule
+isAvailableToday(s); // ? true if today is in s.days (regardless of hour)
+availabilityLabel(s); // ? "Available Today" | "Next: Wednesday" | "By Appointment"
 ```
 
 Components that call these helpers (`OpdBadge`, `DoctorCard`) are marked `"use client"` so they always use the user's current time.
@@ -233,17 +243,17 @@ Components that call these helpers (`OpdBadge`, `DoctorCard`) are marked `"use c
 
 ## Reusable UI Components (`components/ui/`)
 
-| Component | Props | Use for |
-|-----------|-------|---------|
-| `PageHero` | `breadcrumb`, `title`, `subtitle?`, `compact?`, `children?` | Top navy hero on every inner page |
-| `CTABanner` | `title`, `body`, `children` (buttons) | Navy call-to-action strip at page bottom |
-| `Breadcrumb` | `items: { label, href? }[]`, `light?` | Navigation trail |
-| `CheckList` | `items: string[]`, `variant?` (`teal`/`sky`/`green`), `size?` | Bullet lists with coloured check icons |
-| `SectionLabel` | `label`, `heading`, `body?`, `center?` | Teal pill label + h2 heading pattern |
-| `MilestoneTimeline` | `items: { year, event }[]` | Vertical timeline with teal dots |
-| `OpdBadge` | � | Live "OPD Open / Closed" badge in hero |
-| `Button` | `href`, `variant?`, `size?`, `icon?` | Uses `<Link>` for internal routes, `<a>` for external |
-| `Icon` | `name`, `size?`, `stroke?`, `className?` | Lucide-based icon set |
+| Component           | Props                                                         | Use for                                               |
+| ------------------- | ------------------------------------------------------------- | ----------------------------------------------------- |
+| `PageHero`          | `breadcrumb`, `title`, `subtitle?`, `compact?`, `children?`   | Top navy hero on every inner page                     |
+| `CTABanner`         | `title`, `body`, `children` (buttons)                         | Navy call-to-action strip at page bottom              |
+| `Breadcrumb`        | `items: { label, href? }[]`, `light?`                         | Navigation trail                                      |
+| `CheckList`         | `items: string[]`, `variant?` (`teal`/`sky`/`green`), `size?` | Bullet lists with coloured check icons                |
+| `SectionLabel`      | `label`, `heading`, `body?`, `center?`                        | Teal pill label + h2 heading pattern                  |
+| `MilestoneTimeline` | `items: { year, event }[]`                                    | Vertical timeline with teal dots                      |
+| `OpdBadge`          | �                                                             | Live "OPD Open / Closed" badge in hero                |
+| `Button`            | `href`, `variant?`, `size?`, `icon?`                          | Uses `<Link>` for internal routes, `<a>` for external |
+| `Icon`              | `name`, `size?`, `stroke?`, `className?`                      | Lucide-based icon set                                 |
 
 ---
 

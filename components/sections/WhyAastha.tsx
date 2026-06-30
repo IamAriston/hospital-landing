@@ -30,11 +30,7 @@ export default function WhyAastha() {
         <div className="max-w-2xl mb-14">
           <Pill
             variant="custom"
-            style={{
-              background: "rgba(56,189,248,.15)",
-              color: "#7DD3FC",
-              border: "1px solid rgba(56,189,248,.25)",
-            }}
+            className="bg-sky-400/15 text-sky-200 border border-sky-400/25"
           >
             <Icon name="mountain" size={13} stroke={2.2} />
             {whyUs.pill}
@@ -54,18 +50,13 @@ export default function WhyAastha() {
               src={whyUs.image}
               alt="Aastha hospital interior"
               fill
-              className="object-cover"
-              style={{ filter: "saturate(1.05)" }}
+              className="object-cover [filter:saturate(1.05)]"
             />
             <div className="absolute inset-0 bg-linear-to-t from-navy/85 via-navy/10 to-transparent" />
             <div className="absolute left-6 bottom-6 right-6">
               <Pill
                 variant="custom"
-                style={{
-                  background: "rgba(13,148,136,.95)",
-                  color: "#fff",
-                  border: "none",
-                }}
+                className="bg-teal-600/95 text-white border-none"
               >
                 <Icon name="play2" size={11} />
                 {whyUs.imageCaption.pill}

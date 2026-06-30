@@ -1,9 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #0C2340;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -14,13 +13,100 @@
   --color-navy-dark: #13315C;
   --color-cream: #FAF7F2;
   --color-cream-border: #E7DFCF;
-  --color-whatsapp: #25D366;
-  --color-whatsapp-dark: #1a8c3a;
   --color-border: #E2E8F0;
+  --color-sky-ink: #04293F;            /* Dark text / overlay on sky-400 surfaces */
+
+  /* Public-site shadow recipes */
+  --shadow-card-subtle: 0 1px 2px rgba(12,35,64,.04), 0 4px 16px rgba(12,35,64,.04);
+  --shadow-card-pop:    0 1px 2px rgba(12,35,64,.06), 0 20px 50px -20px rgba(12,35,64,.25);
+  --shadow-hover-md:    0 14px 28px -16px rgba(12,35,64,.18);
+  --shadow-hover-teal:  0 10px 24px -14px rgba(13,148,136,.25);
+  --shadow-dropdown:    0 20px 60px -10px rgba(12,35,64,.18);
+  --shadow-mobile-bar:  0 -4px 20px rgba(12,35,64,.08);
+  --shadow-teal-badge:  0 4px 14px rgba(13,148,136,.35);
+  --shadow-sky-button:  0 4px 14px rgba(14,165,233,.35);
+  --shadow-nav-scroll:  0 1px 0 rgba(12,35,64,.04), 0 6px 24px rgba(12,35,64,.06);
+  --shadow-logo-inset:  inset 0 -2px 0 rgba(12,35,64,.12);
+  --shadow-avatar:      0 6px 18px -10px rgba(12,35,64,.25);
+  --shadow-feature-hover: 0 20px 44px -16px rgba(12,35,64,.22);
+  --shadow-progress-glow: 0 0 8px rgba(56,189,248,.7), 0 0 3px rgba(56,189,248,.4);
+  --shadow-input-focus: 0 0 0 3px rgba(14,165,233,.15);
+  --shadow-popover:     0 12px 40px -10px rgba(12,35,64,.18);
+  --shadow-image-card:  0 20px 60px -20px rgba(12,35,64,.2);
+  --shadow-hover-navy:  0 10px 30px -14px rgba(12,35,64,.2);
 
   /* Fonts */
   --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-display: var(--font-plus-jakarta), system-ui, sans-serif;
+  --font-heading: var(--font-plus-jakarta), system-ui, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Dashboard surface tokens → bg-dash-*, text-dash-*, border-dash-* */
+  --color-dash-bg: var(--dash-bg);
+  --color-dash-surface: var(--dash-surface);
+  --color-dash-surface-2: var(--dash-surface-2);
+  --color-dash-surface-3: var(--dash-surface-3);
+  --color-dash-border: var(--dash-border);
+  --color-dash-border-strong: var(--dash-border-strong);
+  --color-dash-text: var(--dash-text);
+  --color-dash-text-dim: var(--dash-text-dim);
+  --color-dash-text-mute: var(--dash-text-mute);
+  --color-brand-teal: var(--teal);
+  --color-brand-teal-700: var(--teal-700);
+  --color-brand-teal-50: var(--teal-50);
+  --color-brand-sky: var(--sky);
+  --color-brand-sky-50: var(--sky-50);
+  --color-brand-amber: var(--amber);
+  --color-brand-amber-50: var(--amber-50);
+  --color-brand-green: var(--green);
+  --color-brand-green-50: var(--green-50);
+  --color-brand-red: var(--red);
+  --color-brand-red-50: var(--red-50);
+
+  /* Dashboard sidebar & topbar tokens */
+  --color-dash-topbar-bg: var(--dash-topbar-bg);
+  --color-dash-sidebar-bg: var(--dash-sidebar-bg);
+  --color-dash-sidebar-text: var(--dash-sidebar-text);
+  --color-dash-sidebar-active: var(--dash-sidebar-active);
+
+  /* Shadow tokens → shadow-card, shadow-hover, shadow-pop */
+  --shadow-card: var(--dash-shadow-card);
+  --shadow-hover: var(--dash-shadow-hover);
+  --shadow-pop: var(--dash-shadow-pop);
 }
 
 *,
@@ -36,8 +122,6 @@ body {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   line-height: 1.7;
@@ -82,6 +166,23 @@ body {
     font-family: inherit;
     font-size: 15px;
   }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Gradient background utility */
+.bg-grad-teal { background: var(--grad-teal); }
+
+/* FeatureCard icon-band spotlight overlay */
+.bg-feature-spotlight {
+  background: radial-gradient(ellipse at top right, rgba(255,255,255,.6), transparent 60%);
 }
 
 ::selection {
@@ -133,6 +234,518 @@ input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: #0ea5e9 !important;
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12) !important;
+  border-color: #0D9488 !important;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.14) !important;
+}
+
+:root {
+  /* shadcn tokens — teal theme */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.587 0.14 181);  /* #0D9488 teal */
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.587 0.14 181);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.587 0.14 181);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.587 0.14 181);
+
+  /* Design palette */
+  --teal: #0D9488;
+  --teal-700: #0F766E;
+  --teal-50: #F0FDFA;
+  --sky: #38BDF8;
+  --sky-50: #EFF9FF;
+  --sky-100: #E0F2FE;
+  --amber: #F59E0B;
+  --amber-50: #FFFBEB;
+  --green: #16A34A;
+  --green-50: #F0FDF4;
+  --red: #DC2626;
+  --red-50: #FEF2F2;
+
+  /* Dashboard surfaces (light) */
+  --dash-bg: #F4F7FB;
+  --dash-surface: #FFFFFF;
+  --dash-surface-2: #FAFBFD;
+  --dash-surface-3: #EEF2F7;
+  --dash-border: #E1E8F0;
+  --dash-border-strong: #C8D5E3;
+  --dash-text: #0C2340;
+  --dash-text-dim: #455570;
+  --dash-text-mute: #8FA3BB;
+  --dash-sidebar-bg: #0C2340;
+  --dash-sidebar-text: #C8D5E8;
+  --dash-sidebar-active: #112B50;
+  --dash-topbar-bg: rgba(255,255,255,.88);
+  --dash-topbar-blur: 14px;
+
+  /* Multi-layer card shadow */
+  --dash-shadow-card: 0 0 0 1px rgba(12,35,64,.04), 0 1px 2px rgba(12,35,64,.04), 0 4px 12px -4px rgba(12,35,64,.07);
+  --dash-shadow-hover: 0 0 0 1px rgba(13,148,136,.12), 0 4px 16px -4px rgba(13,148,136,.18), 0 12px 32px -8px rgba(12,35,64,.10);
+  --dash-shadow-pop: 0 0 0 1px rgba(12,35,64,.06), 0 8px 24px -6px rgba(12,35,64,.16), 0 24px 48px -12px rgba(12,35,64,.12);
+  --dash-shadow-sm: 0 1px 2px rgba(12,35,64,.05), 0 2px 6px -2px rgba(12,35,64,.06);
+
+  /* Gradient palette */
+  --grad-teal: linear-gradient(135deg, #0D9488 0%, #0EA5E9 100%);
+  --grad-teal-soft: linear-gradient(135deg, #14B8A6 0%, #38BDF8 100%);
+  --grad-amber: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+  --grad-green: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --grad-violet: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
+  --grad-slate: linear-gradient(135deg, #64748B 0%, #475569 100%);
+  --grad-nav: linear-gradient(160deg, #0C2340 0%, #13315C 55%, #0F766E 100%);
+
+  /* Font for stat numerals */
+  --font-stat: var(--font-outfit), "Plus Jakarta Sans", sans-serif;
+}
+
+/* Dashboard dark mode via data attribute */
+[data-theme="dark"] {
+  --dash-bg: #0A1322;
+  --dash-surface: #0F1B30;
+  --dash-surface-3: #1B2D4A;
+  --dash-border: #1E3354;
+  --dash-border-strong: #2A4570;
+  --dash-text: #E6EEFB;
+  --dash-text-dim: #A5B4CB;
+  --dash-text-mute: #64748B;
+  --dash-sidebar-bg: #070E1C;
+  --dash-sidebar-text: #94A3B8;
+  --dash-sidebar-active: #13315C;
+  --dash-topbar-bg: #0F1B30;
+  --dash-shadow-card: 0 1px 0 rgba(0,0,0,.3), 0 1px 3px rgba(0,0,0,.25);
+  --dash-shadow-pop: 0 10px 30px -12px rgba(0,0,0,.5);
+
+  /* Tinted brand backgrounds — flip from a light tint to a dark, low-saturation
+     surface so chips / avatars / icon backdrops stay legible on dark pages. */
+  --teal-50:  rgba(20, 184, 166, 0.14);
+  --sky-50:   rgba(56, 189, 248, 0.14);
+  --sky-100:  rgba(56, 189, 248, 0.18);
+  --amber-50: rgba(245, 158, 11, 0.16);
+  --green-50: rgba(22, 163, 74,  0.16);
+  --red-50:   rgba(220, 38, 38,  0.16);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.72 0.12 181); /* lighter teal for dark mode */
+  --primary-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.72 0.12 181);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.145 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.72 0.12 181);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.72 0.12 181);
+}
+
+/* ── Dashboard utility classes ─────────────────────────────── */
+
+/* Status pills */
+.dash-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  transition: box-shadow .2s;
+}
+.dash-pill-teal  {
+  background: #ECFDF8; color: #0F7A6E;
+  border: 1px solid rgba(13,148,136,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+.dash-pill-sky   {
+  background: #EFF9FF; color: #0369A1;
+  border: 1px solid rgba(56,189,248,.25);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+.dash-pill-green {
+  background: #F0FDF5; color: #15803D;
+  border: 1px solid rgba(22,163,74,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+.dash-pill-amber {
+  background: #FFFBEB; color: #92400E;
+  border: 1px solid rgba(245,158,11,.25);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+.dash-pill-red   {
+  background: #FEF2F2; color: #B91C1C;
+  border: 1px solid rgba(220,38,38,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+.dash-pill-slate {
+  background: var(--dash-surface-3);
+  color: var(--dash-text-dim);
+  border: 1px solid var(--dash-border);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+}
+
+/* Live indicator dot */
+@keyframes dash-live-ring {
+  0%   { transform: scale(1);   opacity: 1; }
+  50%  { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(1);   opacity: 0; }
+}
+.dash-live-dot {
+  position: relative;
+  width: 6px; height: 6px; border-radius: 999px;
+  flex-shrink: 0;
+}
+.dash-live-dot::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 999px;
+  background: inherit;
+  animation: dash-live-ring 1.8s ease-out infinite;
+}
+
+/* Filter chips */
+.dash-chip-row {
+  display: inline-flex;
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: 10px;
+  padding: 4px;
+  gap: 2px;
+  box-shadow: var(--dash-shadow-sm);
+}
+.dash-chip {
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--dash-text-dim);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: background .15s, color .15s, transform .1s;
+}
+.dash-chip:hover { color: var(--dash-text); background: var(--dash-surface-3); }
+.dash-chip.active {
+  background: var(--grad-teal);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(13,148,136,.35), inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+/* Page entrance animation */
+@keyframes dash-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.dash-animate { animation: dash-fade-up .35s ease both; }
+.dash-animate-1 { animation: dash-fade-up .35s .05s ease both; }
+.dash-animate-2 { animation: dash-fade-up .35s .10s ease both; }
+.dash-animate-3 { animation: dash-fade-up .35s .15s ease both; }
+.dash-animate-4 { animation: dash-fade-up .35s .20s ease both; }
+
+/* Button shimmer */
+@keyframes dash-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.dash-btn-shimmer {
+  background: linear-gradient(90deg, #0F766E 0%, #0D9488 30%, #14B8A6 50%, #0D9488 70%, #0F766E 100%);
+  background-size: 200% auto;
+  animation: dash-shimmer 3s linear infinite;
+}
+.dash-btn-shimmer:hover { animation-duration: 1.5s; }
+
+/* Card hover lift */
+.dash-card-hover {
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.dash-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--dash-shadow-hover) !important;
+}
+
+/* Stat number typography */
+.dash-stat-num {
+  font-family: var(--font-stat);
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--dash-text);
+}
+
+/* Gradient icon box */
+.dash-icon-box {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  position: relative; overflow: hidden;
+}
+.dash-icon-box::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 60%);
+  border-radius: inherit;
+}
+
+/* Table improvements */
+.dash-table-row { transition: background .12s; }
+.dash-table-row:hover td { background: var(--dash-surface-3); }
+.dash-table-row:hover td:first-child {
+  border-left: 3px solid var(--teal);
+  padding-left: 15px;
+}
+
+/* Topbar glass */
+.dash-topbar-glass {
+  backdrop-filter: blur(var(--dash-topbar-blur));
+  -webkit-backdrop-filter: blur(var(--dash-topbar-blur));
+}
+
+/* ============================================================
+   Sonner toast — Aastha brand theme
+   Maps the four toast types to the teal / sky / amber / red
+   palette and matches the rounded-2xl card language used on
+   landing + dashboard.
+
+   Note: sonner ships its own CSS vars (`--normal-bg`, `--normal-text`,
+   `--normal-border`, `--success-bg`, `--error-bg`, ...) that style the
+   toast surface — overriding plain `background` on the class loses to
+   those defaults. We set sonner's vars on the toaster root for the
+   surface colors, then layer our own utility classes for typography,
+   icon chip, and the per-type accent border.
+   ============================================================ */
+[data-sonner-toaster].aastha-toaster,
+.aastha-toaster {
+  --sonner-toast-font: var(--font-display);
+
+  /* default (info) */
+  --normal-bg: #FFFFFF;
+  --normal-text: #0C2340;
+  --normal-border: #E2E8F0;
+
+  --success-bg: #FFFFFF;
+  --success-text: #0C2340;
+  --success-border: #E2E8F0;
+
+  --info-bg: #FFFFFF;
+  --info-text: #0C2340;
+  --info-border: #E2E8F0;
+
+  --warning-bg: #FFFFFF;
+  --warning-text: #0C2340;
+  --warning-border: #E2E8F0;
+
+  --error-bg: #FFFFFF;
+  --error-text: #0C2340;
+  --error-border: #E2E8F0;
+}
+
+/* Dark-mode sonner surface vars — these are what actually drive the
+   visible toast background, so dark mode needs them. */
+[data-theme="dark"] [data-sonner-toaster].aastha-toaster,
+[data-theme="dark"] .aastha-toaster {
+  --normal-bg:  var(--dash-surface);
+  --normal-text: var(--dash-text);
+  --normal-border: var(--dash-border);
+
+  --success-bg: var(--dash-surface);
+  --success-text: var(--dash-text);
+  --success-border: var(--dash-border);
+
+  --info-bg: var(--dash-surface);
+  --info-text: var(--dash-text);
+  --info-border: var(--dash-border);
+
+  --warning-bg: var(--dash-surface);
+  --warning-text: var(--dash-text);
+  --warning-border: var(--dash-border);
+
+  --error-bg: var(--dash-surface);
+  --error-text: var(--dash-text);
+  --error-border: var(--dash-border);
+}
+
+.aastha-toast {
+  --width: 380px;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  line-height: 1.5;
+  border-left: 4px solid #0D9488 !important;          /* default = teal */
+  border-radius: 14px !important;
+  padding: 14px 16px !important;
+  box-shadow:
+    0 1px 2px rgba(12, 35, 64, .06),
+    0 18px 44px -18px rgba(12, 35, 64, .25) !important;
+  gap: 10px !important;
+}
+
+/* Title + description */
+.aastha-toast-title {
+  font-family: var(--font-display);
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  color: #0C2340 !important;
+  letter-spacing: -0.005em;
+}
+.aastha-toast-desc {
+  font-family: var(--font-sans);
+  font-size: 12.5px !important;
+  color: #475569 !important;
+  margin-top: 2px;
+}
+
+/* Action / cancel buttons inside a toast */
+.aastha-toast-action {
+  background: #0D9488 !important;
+  color: #FFFFFF !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-weight: 600 !important;
+  font-size: 12.5px !important;
+  font-family: var(--font-display) !important;
+  transition: background .12s ease;
+}
+.aastha-toast-action:hover { background: #0F766E !important; }
+.aastha-toast-cancel {
+  background: #F1F5F9 !important;
+  color: #0C2340 !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-weight: 600 !important;
+  font-size: 12.5px !important;
+  font-family: var(--font-display) !important;
+}
+
+/* Close button — solid red dismiss action with a hover lift */
+[data-sonner-toaster] .aastha-toast-close,
+.aastha-toast-close {
+  background: #DC2626 !important;
+  border: 1px solid #DC2626 !important;
+  color: #FFFFFF !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 6px -2px rgba(220, 38, 38, .45);
+  transform: scale(1);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+[data-sonner-toaster] .aastha-toast-close:hover,
+.aastha-toast-close:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 12px -2px rgba(220, 38, 38, .55);
+}
+[data-sonner-toaster] .aastha-toast-close:active,
+.aastha-toast-close:active {
+  transform: scale(0.96);
+}
+[data-sonner-toaster] .aastha-toast-close svg,
+.aastha-toast-close svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+/* Icon container — a soft rounded chip */
+.aastha-toast-icon {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 9px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #ECFDF5;        /* default success-ish backdrop */
+  color: #0D9488;
+}
+.aastha-toast-icon svg { width: 16px !important; height: 16px !important; }
+
+/* ----- type variants ----- */
+.aastha-toast-success {
+  border-left-color: #14B8A6;
+}
+.aastha-toast-success .aastha-toast-icon {
+  background: rgba(20, 184, 166, .12);
+  color: #0F766E;
+}
+
+.aastha-toast-info {
+  border-left-color: #38BDF8;
+}
+.aastha-toast-info .aastha-toast-icon {
+  background: rgba(56, 189, 248, .14);
+  color: #0369A1;
+}
+
+.aastha-toast-warning {
+  border-left-color: #F59E0B;
+}
+.aastha-toast-warning .aastha-toast-icon {
+  background: rgba(245, 158, 11, .14);
+  color: #B45309;
+}
+
+.aastha-toast-error {
+  border-left-color: #EF4444;
+  background: #FFFFFF;
+}
+.aastha-toast-error .aastha-toast-icon {
+  background: rgba(239, 68, 68, .12);
+  color: #B91C1C;
+}
+.aastha-toast-error .aastha-toast-title { color: #7F1D1D !important; }
+
+/* Dark mode (dashboard) — typography tints. Surface colors come from the
+   sonner CSS vars set on the toaster root above. */
+[data-theme="dark"] .aastha-toast-title { color: var(--dash-text) !important; }
+[data-theme="dark"] .aastha-toast-desc  { color: var(--dash-text-dim) !important; }
+[data-theme="dark"] .aastha-toast-cancel {
+  background: var(--dash-surface-3) !important;
+  color: var(--dash-text) !important;
+}
+[data-theme="dark"] .aastha-toast-error .aastha-toast-title {
+  color: #FCA5A5 !important;
 }

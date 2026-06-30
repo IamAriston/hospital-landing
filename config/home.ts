@@ -73,7 +73,7 @@
       icon: "pill",
       name: "Pharmacy",
       slug: "pharmacy",
-      desc: "In-house pharmacy with home delivery across the region. Open 24/7.",
+      desc: "In-house pharmacy with on-campus dispensing. Open 24/7.",
       accent: "sky" as const,
       cta: "Order Meds",
     },
@@ -152,7 +152,7 @@
       rating: 4.9,
       schedule: { days: [1, 3, 5], startHour: 9, endHour: 14 }, // Mon, Wed, Fri
       initial: "AS",
-      tone: "#FCE7F3",
+      tone: "from-pink-100", toneBg: "bg-pink-100",
     },
     {
       name: "Dr. Rohan Thakur",
@@ -162,7 +162,7 @@
       rating: 4.8,
       schedule: { days: [1, 2, 3, 4, 5, 6], startHour: 9, endHour: 13 }, // Mon–Sat
       initial: "RT",
-      tone: "#DBEAFE",
+      tone: "from-blue-100", toneBg: "bg-blue-100",
     },
     {
       name: "Dr. Meera Negi",
@@ -172,7 +172,7 @@
       rating: 4.9,
       schedule: { days: [1, 2, 3, 4, 5, 6], startHour: 8, endHour: 12 }, // Mon–Sat
       initial: "MN",
-      tone: "#DCFCE7",
+      tone: "from-green-100", toneBg: "bg-green-100",
     },
     {
       name: "Dr. Vikram Chauhan",
@@ -182,7 +182,7 @@
       rating: 4.8,
       schedule: { days: [2, 4, 6], startHour: 10, endHour: 14 }, // Tue, Thu, Sat
       initial: "VC",
-      tone: "#FEF3C7",
+      tone: "from-amber-100", toneBg: "bg-amber-100",
     },
     {
       name: "Dr. Priya Verma",
@@ -192,7 +192,7 @@
       rating: 4.9,
       schedule: { days: [1, 2, 3, 4, 5, 6], startHour: 9, endHour: 13 }, // Mon–Sat
       initial: "PV",
-      tone: "#F3E8FF",
+      tone: "from-violet-100", toneBg: "bg-violet-100",
     },
     {
       name: "Dr. Sanjay Rana",
@@ -202,14 +202,14 @@
       rating: 4.7,
       schedule: { days: [1, 2, 3, 4, 5, 6], startHour: 8, endHour: 20 }, // Mon–Sat
       initial: "SR",
-      tone: "#FFE4E6",
+      tone: "from-rose-100", toneBg: "bg-rose-100",
     },
   ],
 
   booking: {
     pill: "Book Online",
     headline: "Book Your Consultation",
-    body: "Choose your department, pick a doctor and confirm in under 2 minutes. We'll send a confirmation on WhatsApp.",
+    body: "Choose your department, pick a doctor and confirm in under 2 minutes. We'll confirm your appointment within 30 minutes during OPD hours.",
     steps: ["Choose Dept", "Pick Doctor", "Confirm"],
     image: "/assets/building-portrait.png",
     timeSlots: ["Morning", "Afternoon", "Evening"] as const,
@@ -244,7 +244,7 @@
       doctor: "Dr. Anjali Sharma",
       date: "Apr 28, 2026",
       readTime: "6 min",
-      tone: "#FECACA",
+      tone: "from-red-200",
     },
     {
       featured: false,
@@ -253,7 +253,7 @@
       doctor: "Dr. Meera Negi",
       date: "Apr 22, 2026",
       readTime: "4 min",
-      tone: "#DCFCE7",
+      tone: "from-green-100",
     },
     {
       featured: false,
@@ -262,7 +262,7 @@
       doctor: "Dr. Rohan Thakur",
       date: "Apr 18, 2026",
       readTime: "5 min",
-      tone: "#DBEAFE",
+      tone: "from-blue-100",
     },
   ],
 

@@ -38,7 +38,7 @@ export default function FeatureCard({
   cta,
 }: FeatureCardProps) {
   return (
-    <div className="bg-white rounded-2xl overflow-hidden group cursor-pointer border border-slate-200 hover:-translate-y-1 hover:shadow-[0_20px_44px_-16px_rgba(12,35,64,.22)] transition-all duration-200">
+    <div className="bg-white rounded-2xl overflow-hidden group cursor-pointer border border-slate-200 hover:-translate-y-1 hover:shadow-feature-hover transition-all duration-200">
       <div
         className={cn(
           "h-24 bg-linear-to-br flex items-center justify-center relative",
@@ -49,7 +49,7 @@ export default function FeatureCard({
         <Icon name={icon as IconName} size={42} stroke={1.5} />
         <span
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,.6),transparent_60%)]"
+          className="absolute inset-0 bg-feature-spotlight"
         />
       </div>
       <div className="px-6 pt-5 pb-6">

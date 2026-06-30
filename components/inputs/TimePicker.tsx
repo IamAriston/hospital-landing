@@ -69,7 +69,7 @@ export default function TimePicker({
           "flex items-center gap-2.5 transition-[border-color,box-shadow] duration-150",
           "hover:border-slate-400",
           hasError ? "border-red-400 bg-red-50/40" : "border-slate-300",
-          open && "border-sky-500 shadow-[0_0_0_3px_rgba(14,165,233,.15)]",
+          open && "border-sky-500 shadow-input-focus",
         )}
       >
         <Icon name="clock" size={15} stroke={2} className="text-slate-400 shrink-0" />
@@ -86,7 +86,7 @@ export default function TimePicker({
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute z-50 mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-[0_12px_40px_-10px_rgba(12,35,64,.18)] overflow-hidden">
+        <div className="absolute z-50 mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-popover overflow-hidden">
           {/* Column headers */}
           <div className="grid grid-cols-[1fr_12px_1fr_52px] border-b border-slate-100">
             <div className="py-2 text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">HR</div>

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
-import Button from "@/components/ui/Button";
-import { siteConfig } from "@/config/site";
+import LandingButton from "@/components/ui/landing-button";
 
 export default function NotFound() {
   return (
@@ -28,24 +27,21 @@ export default function NotFound() {
         </p>
 
         <div className="flex flex-wrap gap-3 justify-center mt-8">
-          <Button href="/" variant="outline" size="lg">
+          <LandingButton href="/" variant="outline" size="lg">
             <Icon name="home" size={18} stroke={2} />
             Back to Home
-          </Button>
-          <Button href="#book" variant="sky" size="lg">
+          </LandingButton>
+          <LandingButton href="#book" variant="sky" size="lg">
             <Icon name="calendar" size={18} stroke={2} />
             Book Appointment
-          </Button>
+          </LandingButton>
         </div>
 
         <div className="mt-8 pt-6 border-t border-slate-200 text-sm text-slate-500">
-          Need help?{" "}
-          <a
-            href={`tel:${siteConfig.phone}`}
-            className="text-teal-600 font-semibold hover:underline"
-          >
-            Call {siteConfig.phone}
-          </a>
+          Looking for something specific?{" "}
+          <Link href="/departments" className="text-teal-600 font-semibold hover:underline">
+            Browse departments
+          </Link>
         </div>
       </div>
     </section>

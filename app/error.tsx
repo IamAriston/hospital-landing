@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Icon from "@/components/ui/Icon";
-import Button from "@/components/ui/Button";
+import LandingButton from "@/components/ui/landing-button";
 import { siteConfig } from "@/config/site";
 
 export default function Error({
@@ -35,14 +35,14 @@ export default function Error({
         </p>
 
         <div className="flex flex-wrap gap-3 justify-center mt-8">
-          <Button onClick={reset} variant="redOutline" size="lg">
+          <LandingButton onClick={reset} variant="redOutline" size="lg">
             <Icon name="arrow" size={18} stroke={2} />
             Try Again
-          </Button>
-          <Button href="/" variant="sky" size="lg">
+          </LandingButton>
+          <LandingButton href="/" variant="sky" size="lg">
             <Icon name="home" size={18} stroke={2} />
             Back to Home
-          </Button>
+          </LandingButton>
         </div>
 
         <div className="mt-8 pt-6 border-t border-slate-200 text-sm text-slate-500">

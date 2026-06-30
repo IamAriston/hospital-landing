@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sign in — Astha Multi Speciality Hospital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --sky: #38bdf8;
+        --sky-100: #e0f2fe;
+        --sky-50: #eff9ff;
+        --teal: #0d9488;
+        --teal-700: #0f766e;
+        --teal-50: #f0fdfa;
+        --navy: #0c2340;
+        --navy-700: #13315c;
+        --cream: #faf7f2;
+        --slate: #475569;
+        --slate-400: #94a3b8;
+        --border: #e2e8f0;
+        --red: #dc2626;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--slate);
+        background: #fff;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+        color: var(--navy);
+        margin: 0;
+        letter-spacing: -0.015em;
+      }
+      a {
+        color: inherit;
+      }
+      input,
+      button {
+        font-family: inherit;
+        font-size: 15px;
+        color: var(--navy);
+      }
+      ::selection {
+        background: var(--sky);
+        color: var(--navy);
+      }
+
+      .shell {
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        min-height: 100vh;
+      }
+
+      /* LEFT PANEL */
+      .brand {
+        position: relative;
+        background: linear-gradient(
+          160deg,
+          #0c2340 0%,
+          #13315c 55%,
+          #0f766e 100%
+        );
+        color: #fff;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        padding: 40px 56px;
+      }
+      .brand-topo {
+        position: absolute;
+        inset: 0;
+        opacity: 0.1;
+        pointer-events: none;
+      }
+      .brand-mountains {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+      }
+      .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+        z-index: 2;
+      }
+      .logo-mark {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #38bdf8, #14b8a6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-weight: 800;
+        font-size: 21px;
+        box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+      }
+      .brand-name {
+        font-family: "Plus Jakarta Sans";
+        font-weight: 800;
+        font-size: 22px;
+        color: #fff;
+        line-height: 1.05;
+      }
+      .brand-tagline {
+        font-size: 11px;
+        color: #7dd3fc;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        margin-top: 2px;
+      }
+
+      .brand-body {
+        margin-top: auto;
+        margin-bottom: 32px;
+        position: relative;
+        z-index: 2;
+        max-width: 520px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(56, 189, 248, 0.14);
+        border: 1px solid rgba(56, 189, 248, 0.3);
+        color: #7dd3fc;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      .brand-h {
+        font-size: 42px;
+        line-height: 1.12;
+        color: #fff;
+        font-weight: 800;
+        margin-top: 18px;
+      }
+      .brand-h em {
+        color: #5eead4;
+        font-style: normal;
+      }
+      .brand-sub {
+        font-size: 16px;
+        color: #bae6fd;
+        margin-top: 14px;
+        line-height: 1.6;
+      }
+
+      .brand-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 30px;
+      }
+      .brand-stat {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 14px 16px;
+        backdrop-filter: blur(6px);
+      }
+      .bs-num {
+        font-family: "Plus Jakarta Sans";
+        font-size: 24px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+      }
+      .bs-lab {
+        font-size: 11.5px;
+        color: #94a3b8;
+        margin-top: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .brand-foot {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        color: #94a3b8;
+        font-size: 13px;
+        position: relative;
+        z-index: 2;
+      }
+      .brand-foot a {
+        color: #bae6fd;
+        text-decoration: none;
+      }
+      .brand-foot a:hover {
+        color: #5eead4;
+      }
+
+      /* RIGHT PANEL */
+      .form-side {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+        background: #fff;
+      }
+      .form-card {
+        width: 100%;
+        max-width: 420px;
+        display: flex;
+        flex-direction: column;
+      }
+      .eyebrow {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--teal);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+      }
+      .form-h {
+        font-size: 32px;
+        font-weight: 800;
+        margin-top: 8px;
+      }
+      .form-sub {
+        font-size: 15px;
+        color: var(--slate);
+        margin-top: 8px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        margin-top: 18px;
+      }
+      .field label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--navy);
+      }
+      .input {
+        width: 100%;
+        padding: 13px 14px 13px 44px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: #fff;
+        outline: none;
+        font-size: 14.5px;
+        color: var(--navy);
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+      .input:focus {
+        border-color: var(--teal);
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.14);
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .input-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--slate-400);
+      }
+      .input-eye {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: var(--slate-400);
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+      }
+      .input-eye:hover {
+        color: var(--teal);
+      }
+
+      .row-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 14px;
+        font-size: 13.5px;
+      }
+      .check {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        color: var(--navy);
+        font-weight: 500;
+      }
+      .check input {
+        accent-color: var(--teal);
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+      }
+      .link-teal {
+        color: var(--teal);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .link-teal:hover {
+        color: var(--teal-700);
+        text-decoration: underline;
+      }
+
+      .btn-submit {
+        margin-top: 22px;
+        width: 100%;
+        padding: 14px 16px;
+        background: var(--teal);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 15px;
+        font-family: "Plus Jakarta Sans";
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition:
+          background 0.15s,
+          transform 0.15s,
+          box-shadow 0.2s;
+        box-shadow:
+          0 1px 0 rgba(15, 118, 110, 0.4),
+          inset 0 -2px 0 rgba(0, 0, 0, 0.08);
+      }
+      .btn-submit:hover {
+        background: var(--teal-700);
+        transform: translateY(-1px);
+      }
+      .btn-submit:active {
+        transform: translateY(0);
+      }
+
+      .demo {
+        margin-top: 18px;
+        background: var(--sky-50);
+        border: 1px dashed #bae6fd;
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 12.5px;
+        color: #0369a1;
+        display: flex;
+        gap: 10px;
+      }
+      .demo b {
+        color: #075985;
+        font-weight: 700;
+      }
+      .demo code {
+        background: #fff;
+        padding: 1px 6px;
+        border-radius: 5px;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        color: var(--navy);
+        font-size: 12px;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 24px 0;
+        color: var(--slate-400);
+        font-size: 12px;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .alt-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .btn-alt {
+        padding: 11px 14px;
+        border: 1px solid var(--border);
+        background: #fff;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--navy);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+      }
+      .btn-alt:hover {
+        border-color: #cbd5e1;
+        background: #fafafa;
+      }
+
+      .foot-form {
+        margin-top: 32px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--slate);
+      }
+      .foot-form a {
+        color: var(--teal);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--slate);
+        text-decoration: none;
+        margin-bottom: 24px;
+        cursor: pointer;
+        align-self: flex-start;
+      }
+      .back-link:hover {
+        color: var(--teal);
+      }
+
+      /* error */
+      .err {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+        font-size: 13px;
+        display: none;
+        align-items: center;
+        gap: 8px;
+      }
+      .err.show {
+        display: flex;
+      }
+
+      /* responsive */
+      @media (max-width: 960px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+        .brand {
+          display: none;
+        }
+        .form-side {
+          padding: 32px 22px;
+          min-height: 100vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <!-- LEFT: brand -->
+      <aside class="brand">
+        <!-- topo lines -->
+        <svg
+          class="brand-topo"
+          viewBox="0 0 600 800"
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+        >
+          <g stroke="#5EEAD4" fill="none" stroke-width="1">
+            <path d="M -50 80 Q 150 30 320 100 T 700 80" />
+            <path d="M -50 130 Q 150 80 320 150 T 700 130" />
+            <path d="M -50 180 Q 150 130 320 200 T 700 180" />
+            <path d="M -50 230 Q 150 180 320 250 T 700 230" />
+            <path d="M -50 280 Q 150 230 320 300 T 700 280" />
+            <path d="M -50 330 Q 150 280 320 350 T 700 330" />
+            <path d="M -50 380 Q 150 330 320 400 T 700 380" />
+            <path d="M -50 430 Q 150 380 320 450 T 700 430" />
+            <path d="M -50 480 Q 150 430 320 500 T 700 480" />
+          </g>
+        </svg>
+
+        <!-- mountains -->
+        <svg
+          class="brand-mountains"
+          viewBox="0 0 800 220"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          height="220"
+        >
+          <path
+            d="M0 180 L120 80 L210 130 L320 50 L420 110 L540 40 L660 110 L760 70 L800 100 L800 220 L0 220 Z"
+            fill="#0D9488"
+            opacity="0.4"
+          />
+          <path
+            d="M0 200 L100 140 L200 170 L300 110 L420 160 L520 100 L650 160 L760 120 L800 140 L800 220 L0 220 Z"
+            fill="#38BDF8"
+            opacity="0.25"
+          />
+          <circle cx="540" cy="40" r="10" fill="#FFFFFF" opacity="0.4" />
+        </svg>
+
+        <div class="brand-logo">
+          <div class="logo-mark">A</div>
+          <div>
+            <div class="brand-name">Astha</div>
+            <div class="brand-tagline">Multi Speciality Hospital</div>
+          </div>
+        </div>
+
+        <div class="brand-body">
+          <span class="pill">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m3 20 6-9 4 5 3-4 5 8z" />
+              <circle cx="17" cy="6" r="1.5" />
+            </svg>
+            Staff Portal · v2.4
+          </span>
+          <h1 class="brand-h">Care that runs<br />on <em>clarity</em>.</h1>
+          <p class="brand-sub">
+            One place to manage appointments, OPD schedules, patient records and
+            doctor rosters — built for the people who keep Astha running every
+            day.
+          </p>
+
+          <div class="brand-stats">
+            <div class="brand-stat">
+              <div class="bs-num">128</div>
+              <div class="bs-lab">Appts Today</div>
+            </div>
+            <div class="brand-stat">
+              <div class="bs-num">22</div>
+              <div class="bs-lab">Departments</div>
+            </div>
+            <div class="brand-stat">
+              <div class="bs-num">45</div>
+              <div class="bs-lab">Doctors On</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="brand-foot">
+          <span>© 2026 Astha Hospital</span>
+          <span style="opacity: 0.4">·</span>
+          <a href="#">Help</a>
+          <a href="#">Privacy</a>
+          <a href="index.html">← Public site</a>
+        </div>
+      </aside>
+
+      <!-- RIGHT: form -->
+      <main class="form-side">
+        <div class="form-card">
+          <a class="back-link" href="index.html">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back to homepage
+          </a>
+
+          <div class="eyebrow">Welcome back</div>
+          <h2 class="form-h">Sign in to Astha</h2>
+          <p class="form-sub">
+            Use your staff credentials to access the dashboard.
+          </p>
+
+          <form id="loginForm" autocomplete="off" novalidate>
+            <div class="field">
+              <label for="email">Email or Staff ID</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <path d="m3 7 9 6 9-6" />
+                  </svg>
+                </span>
+                <input
+                  class="input"
+                  id="email"
+                  type="text"
+                  placeholder="reception@asthahospital.in"
+                  value="reception@asthahospital.in"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="4" y="11" width="16" height="10" rx="2" />
+                    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+                  </svg>
+                </span>
+                <input
+                  class="input"
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value="astha2026"
+                />
+                <button
+                  class="input-eye"
+                  type="button"
+                  id="togglePw"
+                  aria-label="Show password"
+                >
+                  <svg
+                    id="eyeIcon"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="row-between">
+              <label class="check">
+                <input type="checkbox" id="remember" checked />
+                Remember me on this device
+              </label>
+              <a class="link-teal" href="#">Forgot password?</a>
+            </div>
+
+            <div class="err" id="errBox">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v5M12 16v.01" />
+              </svg>
+              <span id="errMsg">Invalid credentials.</span>
+            </div>
+
+            <button class="btn-submit" id="submit" type="submit">
+              <span id="submitText">Sign In to Dashboard</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <div class="demo">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="flex-shrink: 0; margin-top: 1px"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v4M12 16v.01" />
+              </svg>
+              <div>
+                <b>Demo credentials</b> are pre-filled. Click <b>Sign In</b> to
+                enter the dashboard.<br />
+                <span style="opacity: 0.85"
+                  >Email: <code>reception@asthahospital.in</code> · Password:
+                  <code>astha2026</code></span
+                >
+              </div>
+            </div>
+          </form>
+
+          <div class="divider">OR</div>
+
+          <div class="alt-actions">
+            <button class="btn-alt" type="button">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="11" width="18" height="10" rx="2" />
+                <path d="M7 11V8a5 5 0 0 1 10 0v3" />
+                <circle cx="12" cy="16" r="1" fill="currentColor" />
+              </svg>
+              Sign in with SSO (Single Sign-On)
+            </button>
+            <button class="btn-alt" type="button">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"
+                />
+              </svg>
+              Call IT Helpdesk
+            </button>
+          </div>
+
+          <div class="foot-form">
+            Need access? <a href="#">Request an account</a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // password toggle
+      const pw = document.getElementById("password");
+      const togglePw = document.getElementById("togglePw");
+      const eyeIcon = document.getElementById("eyeIcon");
+      togglePw.addEventListener("click", () => {
+        const isPw = pw.type === "password";
+        pw.type = isPw ? "text" : "password";
+        eyeIcon.innerHTML = isPw
+          ? '<path d="M3 3l18 18M10.6 6.2A9 9 0 0 1 22 12s-1.5 2.6-4.2 4.5M6.6 6.6C3.8 8.5 2 12 2 12s4 7 10 7c1.6 0 3-.3 4.3-.9M9.9 9.9A3 3 0 0 0 14.1 14.1"/>'
+          : '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
+      });
+
+      // submit -> dashboard
+      const form = document.getElementById("loginForm");
+      const errBox = document.getElementById("errBox");
+      const errMsg = document.getElementById("errMsg");
+      const submitBtn = document.getElementById("submit");
+      const submitText = document.getElementById("submitText");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        const pwv = document.getElementById("password").value;
+        errBox.classList.remove("show");
+
+        if (!email || !pwv) {
+          errMsg.textContent = "Please enter both email and password.";
+          errBox.classList.add("show");
+          return;
+        }
+
+        // Loading state, then redirect
+        submitBtn.disabled = true;
+        submitBtn.style.background = "#0F766E";
+        submitText.textContent = "Signing in…";
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 650);
+      });
+    </script>
+  </body>
+</html>

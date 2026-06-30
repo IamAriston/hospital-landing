@@ -4,28 +4,26 @@ export const siteConfig = {
   tagline: "Advanced Care, Amidst the Mountains.",
   description:
     "Aastha Multi Speciality Hospital brings world-class medical care to the hills � expert specialists, modern facilities, and compassionate service for the people of Himachal Pradesh.",
-  phone: "+91 98885 45809",
   emergency: "1066",
   emergencyFull: "+91 98765 11066",
-  whatsapp: "+91 98885 45809",
   email: "care@Aasthahospital.in",
   address: {
-    line1: "Ridge Road, Tutu, Shimla",
-    line2: "Himachal Pradesh � 171011",
+    line1:
+      "Aastha Hospital Complex, Neel Tara Parimahal Enclave, Panthaghati, Kasumpti, Shimla",
+    line2: "Himachal Pradesh 171009",
   },
   hours: {
     opd: {
       days: [1, 2, 3, 4, 5, 6], // Mon�Sat
       startHour: 8,
       endHour: 20,
-      label: "Mon�Sat � 8 AM � 8 PM",
+      label: "Mon-Sat / 8 AM - 8 PM",
     },
     emergency: "24 / 7 / 365",
   },
   social: {
     facebook: "#",
     instagram: "#",
-    whatsapp: "#",
     twitter: "#",
   },
   nav: [
@@ -120,14 +118,6 @@ export const siteConfig = {
       { label: "Our Doctors", href: "/doctors" },
       { label: "Services", href: "/services" },
       { label: "Contact", href: "/contact" },
-    ],
-    patient: [
-      { label: "Book Appointment", href: "/#book" },
-      { label: "OPD Schedule", href: "/patients/opd" },
-      { label: "Patient Portal", href: "/patients/portal" },
-      { label: "Labs & Reports", href: "/patients/labs" },
-      { label: "Insurance / TPA", href: "/patients/insurance" },
-      { label: "Feedback", href: "/patients/feedback" },
     ],
   },
 };

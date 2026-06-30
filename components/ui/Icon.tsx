@@ -12,7 +12,7 @@ import {
 
 // Tabler — for icons Lucide doesn't have
 import {
-  IconBrandFacebook, IconBrandInstagram, IconBrandWhatsapp, IconBrandX,
+  IconBrandFacebook, IconBrandInstagram, IconBrandX,
   IconAlarmFilled, IconDental, IconLungs,
   type Icon as TablerIcon,
 } from "@tabler/icons-react";
@@ -22,7 +22,7 @@ export type IconName =
   | "phone" | "ambulance" | "chat" | "check" | "arrow" | "arrowSmall"
   | "star" | "mountain" | "home" | "user" | "users" | "stethoscope"
   | "heart" | "shield" | "building" | "bed" | "map" | "facebook"
-  | "instagram" | "whatsapp" | "twitter" | "menu" | "close" | "siren"
+  | "instagram" | "twitter" | "menu" | "close" | "siren"
   | "chevron" | "play" | "book" | "bone" | "brain" | "baby" | "eye"
   | "tooth" | "lung" | "kidney" | "activity" | "mail" | "pin" | "apple"
   | "play2" | "quote" | "headset" | "badge";
@@ -81,7 +81,6 @@ const lucideMap: Partial<Record<IconName, LucideIcon>> = {
 const tablerMap: Partial<Record<IconName, TablerIcon>> = {
   facebook: IconBrandFacebook,
   instagram: IconBrandInstagram,
-  whatsapp: IconBrandWhatsapp,
   twitter: IconBrandX,
   siren: IconAlarmFilled,
   tooth: IconDental,

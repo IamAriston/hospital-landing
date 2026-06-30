@@ -70,13 +70,13 @@ export default function Navbar() {
       ref={navRef}
       className={cn(
         "bg-white h-17.5 border-b border-slate-200/60 sticky top-0 z-50 transition-shadow duration-300",
-        scrolled && "shadow-[0_1px_0_rgba(12,35,64,.04),0_6px_24px_rgba(12,35,64,.06)]",
+        scrolled && "shadow-nav-scroll",
       )}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 h-full flex items-center justify-between gap-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
-          <div className="w-9.5 h-9.5 rounded-[10px] bg-linear-to-br from-teal-600 to-sky-400 flex items-center justify-center text-white font-extrabold text-lg font-display shadow-[inset_0_-2px_0_rgba(12,35,64,.12)]">
+          <div className="w-9.5 h-9.5 rounded-[10px] bg-linear-to-br from-teal-600 to-sky-400 flex items-center justify-center text-white font-extrabold text-lg font-display shadow-logo-inset">
             A
           </div>
           <div className="flex flex-col leading-[1.05]">
@@ -123,7 +123,7 @@ export default function Navbar() {
                 {isOpen && dropItems && (
                   <div
                     className={cn(
-                      "absolute top-full left-1/2 -translate-x-1/2 mt-1.5 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_60px_-10px_rgba(12,35,64,.18)] overflow-hidden",
+                      "absolute top-full left-1/2 -translate-x-1/2 mt-1.5 bg-white border border-slate-200 rounded-2xl shadow-dropdown overflow-hidden",
                       item.label === "Departments" ? "w-[500px]" : "w-56",
                     )}
                   >
@@ -174,7 +174,7 @@ export default function Navbar() {
           </button>
           <button
             onClick={scrollToBook}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold bg-sky-400 text-[#04293F] hover:bg-sky-500 transition-colors font-display"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold bg-sky-400 text-sky-ink hover:bg-sky-500 transition-colors font-display"
           >
             Book Appointment
           </button>
@@ -244,11 +244,19 @@ export default function Navbar() {
             </button>
             <button
               onClick={scrollToBook}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold bg-sky-400 text-[#04293F] font-display"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold bg-sky-400 text-sky-ink font-display"
             >
               Book Appointment
             </button>
           </div>
+          <Link
+            href="/login"
+            onClick={() => setMobileOpen(false)}
+            className="mt-3 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-[13px] font-semibold text-slate-500 hover:text-navy transition-colors"
+          >
+            <Icon name="user" size={14} stroke={2} />
+            Staff Login
+          </Link>
         </div>
       )}
     </nav>

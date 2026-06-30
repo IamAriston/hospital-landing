@@ -23,11 +23,7 @@ export default function EmergencyCTA() {
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8 text-center">
         <Pill
           variant="custom"
-          style={{
-            background: "rgba(220,38,38,.18)",
-            color: "#FCA5A5",
-            border: "1px solid rgba(220,38,38,.3)",
-          }}
+          className="bg-red-600/18 text-red-300 border border-red-600/30"
         >
           <Icon name="siren" size={13} stroke={2.2} />
           {emergency.pill}
@@ -57,7 +53,7 @@ export default function EmergencyCTA() {
         <div className="flex flex-wrap gap-3.5 justify-center mt-8">
           <a
             href={`tel:${siteConfig.emergency}`}
-            className="inline-flex items-center gap-2 px-7 py-4.5 rounded-[10px] text-base font-semibold font-display bg-sky-400 text-[#04293F] hover:bg-sky-500 transition-colors"
+            className="inline-flex items-center gap-2 px-7 py-4.5 rounded-[10px] text-base font-semibold font-display bg-sky-400 text-sky-ink hover:bg-sky-500 transition-colors"
           >
             <Icon name="phone" size={18} stroke={2} /> Call Now
           </a>

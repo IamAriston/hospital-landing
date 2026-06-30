@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx shadcn@latest *)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(node *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\Workspace\\\\hospital-landing\" -Recurse -Force)",
+      "Bash(Select-Object FullName, PSIsContainer)"
+    ]
+  }
+}

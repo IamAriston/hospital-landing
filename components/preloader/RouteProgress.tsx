@@ -46,18 +46,13 @@ export default function RouteProgress() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[200] h-[3px] pointer-events-none"
-      style={{ opacity: fading ? 0 : 1, transition: "opacity 0.4s ease" }}
+      className={`fixed top-0 left-0 right-0 z-[200] h-[3px] pointer-events-none transition-opacity duration-[400ms] ease-in-out ${fading ? "opacity-0" : "opacity-100"}`}
     >
       <div
-        className="h-full bg-sky-400"
+        className="h-full bg-sky-400 shadow-progress-glow"
         style={{
           width: `${width}%`,
-          transition:
-            width === 0 ? "none"
-            : width <= 78 ? "width 0.9s cubic-bezier(0.1, 0.5, 0.3, 1)"
-            : "width 0.25s ease-in",
-          boxShadow: "0 0 8px rgba(56,189,248,0.7), 0 0 3px rgba(56,189,248,0.4)",
+          transition: width === 0 ? "none" : width <= 78 ? "width 0.9s cubic-bezier(0.1,0.5,0.3,1)" : "width 0.25s ease-in",
         }}
       />
     </div>

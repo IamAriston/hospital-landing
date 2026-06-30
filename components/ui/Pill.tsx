@@ -6,7 +6,6 @@ interface PillProps {
   variant?: PillVariant;
   children: React.ReactNode;
   className?: string;
-  style?: React.CSSProperties;
 }
 
 const variants: Record<PillVariant, string> = {
@@ -18,7 +17,7 @@ const variants: Record<PillVariant, string> = {
   custom: "",
 };
 
-export default function Pill({ variant = "teal", children, className, style }: PillProps) {
+export default function Pill({ variant = "teal", children, className }: PillProps) {
   return (
     <span
       className={cn(
@@ -26,7 +25,6 @@ export default function Pill({ variant = "teal", children, className, style }: P
         variants[variant],
         className
       )}
-      style={style}
     >
       {children}
     </span>

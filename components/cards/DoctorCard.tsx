@@ -12,6 +12,7 @@ interface DoctorCardProps {
   schedule: Schedule;
   initial: string;
   tone: string;
+  toneBg?: string;
 }
 
 export default function DoctorCard({
@@ -28,16 +29,12 @@ export default function DoctorCard({
   const label = availabilityLabel(schedule);
 
   return (
-    <div className="bg-white border border-slate-200/70 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-[0_14px_28px_-16px_rgba(12,35,64,.2)] hover:border-sky-200 transition-all duration-200 snap-start shrink-0">
+    <div className="bg-white border border-slate-200/70 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-hover-md hover:border-sky-200 transition-all duration-200 snap-start shrink-0">
       {/* Avatar area */}
       <div
-        className="relative flex items-center justify-center border-b border-slate-200"
-        style={{
-          aspectRatio: "1/1",
-          background: `linear-gradient(135deg, ${tone} 0%, #fff 100%)`,
-        }}
+        className={`relative flex items-center justify-center border-b border-slate-200 aspect-square bg-gradient-to-br to-white ${tone}`}
       >
-        <div className="w-30 h-30 rounded-full bg-white border-[3px] border-white shadow-[0_6px_18px_-10px_rgba(12,35,64,.25)] flex items-center justify-center text-navy font-display text-[36px] font-bold">
+        <div className="w-30 h-30 rounded-full bg-white border-[3px] border-white shadow-avatar flex items-center justify-center text-navy font-display text-[36px] font-bold">
           {initial}
         </div>
         <span
@@ -72,7 +69,7 @@ export default function DoctorCard({
           </span>
           <span className="text-slate-500 text-[12.5px]">· {yrs} yrs exp</span>
         </div>
-        <button className="w-full mt-3.5 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg bg-sky-400 text-[#04293F] text-[13px] font-semibold font-display hover:bg-sky-500 transition-colors">
+        <button className="w-full mt-3.5 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-lg bg-sky-400 text-sky-ink text-[13px] font-semibold font-display hover:bg-sky-500 transition-colors">
           <Icon name="calendar" size={15} stroke={2} />
           Book Appointment
         </button>

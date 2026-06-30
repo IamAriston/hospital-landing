@@ -9,7 +9,7 @@ interface DeptCardProps {
 
 export default function DeptCard({ icon, name, desc }: DeptCardProps) {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 group hover:-translate-y-1 hover:border-teal-200 hover:shadow-[0_10px_24px_-14px_rgba(13,148,136,.25)] transition-all duration-200 cursor-pointer">
+    <div className="bg-white border border-slate-200 rounded-2xl p-5 group hover:-translate-y-1 hover:border-teal-200 hover:shadow-hover-teal transition-all duration-200 cursor-pointer">
       <div className="w-12 h-12 rounded-full bg-teal-50 text-teal-600 inline-flex items-center justify-center">
         <Icon name={icon as IconName} size={24} stroke={1.7} />
       </div>

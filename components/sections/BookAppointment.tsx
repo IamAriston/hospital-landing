@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { toast } from "sonner";
 import Icon from "@/components/ui/Icon";
 import Pill from "@/components/ui/Pill";
 import FormField from "@/components/inputs/FormField";
@@ -9,61 +10,108 @@ import TextField from "@/components/inputs/TextField";
 import SelectField from "@/components/inputs/SelectField";
 import DateField from "@/components/inputs/DateField";
 import TextArea from "@/components/inputs/TextArea";
-import TimePicker from "@/components/inputs/TimePicker";
+import { createAppointment } from "@/lib/actions/appointments";
 import { homeConfig } from "@/config/home";
 
 type FormState = {
   name: string;
   phone: string;
-  dept: string;
-  doctor: string;
-  date: string;
-  time: string;
-  msg: string;
+  email: string;
+  department_id: string;
+  doctor_id: string;
+  preferred_date: string;
+  time_slot: string;
+  message: string;
 };
 
 type Errors = Partial<Record<keyof FormState, string>>;
 
-export default function BookAppointment() {
-  const { booking, departments, doctors } = homeConfig;
-  const deptOptions = departments.map((d) => ({ value: d.name, label: d.name }));
-  const doctorOptions = doctors.map((d) => ({ value: d.name, label: d.name }));
-  const [form, setForm] = useState<FormState>({
-    name: "",
-    phone: "",
-    dept: "",
-    doctor: "",
-    date: "",
-    time: "",
-    msg: "",
-  });
+type BookAppointmentProps = {
+  departments: { id: string; name: string }[];
+  doctors: { id: string; name: string; department_id: string | null }[];
+};
+
+const TIME_SLOTS = [
+  { value: "Morning", label: "Morning (8 AM – 12 PM)" },
+  { value: "Afternoon", label: "Afternoon (12 PM – 5 PM)" },
+  { value: "Evening", label: "Evening (5 PM – 8 PM)" },
+];
+
+const EMPTY: FormState = {
+  name: "",
+  phone: "",
+  email: "",
+  department_id: "",
+  doctor_id: "",
+  preferred_date: "",
+  time_slot: "",
+  message: "",
+};
+
+export default function BookAppointment({ departments, doctors }: BookAppointmentProps) {
+  const { booking } = homeConfig;
+
+  const deptOptions = departments.map((d) => ({ value: d.id, label: d.name }));
+
+  const [form, setForm] = useState<FormState>(EMPTY);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
 
+  const visibleDoctors = form.department_id
+    ? doctors.filter((d) => d.department_id === form.department_id)
+    : doctors;
+  const doctorOptions = visibleDoctors.map((d) => ({ value: d.id, label: d.name }));
+
   const update = (k: keyof FormState, v: string) =>
-    setForm((f) => ({ ...f, [k]: v }));
+    setForm((f) => {
+      const next = { ...f, [k]: v };
+      // Reset doctor when department changes if the doctor doesn't belong to it.
+      if (k === "department_id" && f.doctor_id) {
+        const stillValid = doctors.some(
+          (d) => d.id === f.doctor_id && d.department_id === v,
+        );
+        if (!stillValid) next.doctor_id = "";
+      }
+      return next;
+    });
 
   const validate = (): boolean => {
     const e: Errors = {};
     if (!form.name.trim()) e.name = "Required";
-    if (!/^\d{10}$/.test(form.phone.replace(/\s/g, "")))
-      e.phone = "10-digit phone";
-    if (!form.dept) e.dept = "Pick one";
-    if (!form.date) e.date = "Pick a date";
+    if (!/^\d{10}$/.test(form.phone.replace(/\s/g, ""))) e.phone = "10-digit phone";
+    if (!form.preferred_date) e.preferred_date = "Pick a date";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (validate()) setSubmitted(true);
-  };
+    if (!validate()) return;
+    setSubmitting(true);
+    const result = await createAppointment({
+      patient_name: form.name,
+      patient_phone: form.phone,
+      patient_email: form.email || undefined,
+      department_id: form.department_id || null,
+      doctor_id: form.doctor_id || null,
+      preferred_date: form.preferred_date,
+      time_slot: form.time_slot || undefined,
+      message: form.message || undefined,
+    });
+    setSubmitting(false);
+    if (result.ok) {
+      setSubmitted(true);
+      toast.success("Appointment requested — we'll be in touch.");
+    } else {
+      toast.error(result.error);
+    }
+  }
 
   return (
     <section id="book" className="bg-cream py-20 sm:py-24">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-[45fr_55fr] gap-10 lg:gap-12 items-start">
-          {/* Left */}
           <div>
             <Pill variant="teal">
               <Icon name="calendar" size={13} stroke={2.2} />
@@ -76,7 +124,6 @@ export default function BookAppointment() {
               {booking.body}
             </p>
 
-            {/* Steps */}
             <div className="flex flex-wrap items-center gap-2 mt-8">
               {booking.steps.map((label, i) => (
                 <div key={label} className="flex items-center gap-2">
@@ -84,46 +131,36 @@ export default function BookAppointment() {
                     <span className="w-6.5 h-6.5 rounded-full bg-teal-600 text-white inline-flex items-center justify-center text-[13px] font-bold font-display">
                       {i + 1}
                     </span>
-                    <span className="text-[13.5px] font-semibold text-navy">
-                      {label}
-                    </span>
+                    <span className="text-[13.5px] font-semibold text-navy">{label}</span>
                   </div>
                   {i < booking.steps.length - 1 && (
-                    <Icon
-                      name="arrowSmall"
-                      size={16}
-                      stroke={2}
-                      className="text-slate-400"
-                    />
+                    <Icon name="arrowSmall" size={16} stroke={2} className="text-slate-400" />
                   )}
                 </div>
               ))}
             </div>
 
-            {/* Call card */}
             <div className="mt-7 p-5 sm:p-6 bg-white border border-slate-200 rounded-2xl">
               <div className="text-[12px] text-slate-500 uppercase tracking-[.12em] font-semibold">
-                Or call us directly
+                What happens next
               </div>
-              <div className="flex items-center gap-2.5 mt-2">
-                <Icon
-                  name="headset"
-                  size={22}
-                  stroke={1.8}
-                  className="text-teal-600"
-                />
-                <span className="font-display font-bold text-[24px] text-teal-600">
-                  +91 98885 45809
-                </span>
-              </div>
-              <button className="mt-3.5 w-full inline-flex items-center justify-center gap-2 py-3 rounded-[10px] bg-whatsapp text-white font-semibold text-sm font-display hover:bg-[#1a8c3a] transition-colors">
-                <Icon name="whatsapp" size={18} stroke={1.8} />
-                Book via WhatsApp
-              </button>
+              <ul className="mt-3 flex flex-col gap-2.5">
+                {[
+                  "We confirm your slot within 30 minutes during OPD hours.",
+                  "Bring an ID and any prior reports to your visit.",
+                  "Walk-ins welcome — booking just reduces your wait.",
+                ].map((line) => (
+                  <li key={line} className="flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon name="check" size={11} stroke={2.8} />
+                    </span>
+                    <span className="text-[13.5px] text-slate-700">{line}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            {/* Photo */}
-            <div className="mt-6 rounded-2xl overflow-hidden border border-[#EDE5D5] aspect-16/10">
+            <div className="mt-6 rounded-2xl overflow-hidden border border-cream-border aspect-16/10">
               <Image
                 src={booking.image}
                 alt="Aastha Hospital building"
@@ -134,8 +171,7 @@ export default function BookAppointment() {
             </div>
           </div>
 
-          {/* Right � form */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-[0_1px_2px_rgba(12,35,64,.04),0_4px_16px_rgba(12,35,64,.04)]">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-card-subtle">
             {submitted ? (
               <div className="flex flex-col items-center text-center py-10 px-5">
                 <div className="w-16 h-16 rounded-full bg-green-100 text-green-700 flex items-center justify-center">
@@ -145,21 +181,13 @@ export default function BookAppointment() {
                   Appointment Requested!
                 </h3>
                 <p className="mt-2.5 text-slate-600 max-w-sm">
-                  Thanks {form.name.split(" ")[0]} � our team will confirm via
-                  WhatsApp on +91 {form.phone} within 30 minutes.
+                  Thanks {form.name.split(" ")[0]} — our team will confirm your appointment
+                  within 30 minutes during OPD hours.
                 </p>
                 <button
                   onClick={() => {
                     setSubmitted(false);
-                    setForm({
-                      name: "",
-                      phone: "",
-                      dept: "",
-                      doctor: "",
-                      date: "",
-                      time: "",
-                      msg: "",
-                    });
+                    setForm(EMPTY);
                   }}
                   className="mt-5 inline-flex items-center gap-2 px-6 py-3 rounded-[10px] border border-teal-600 text-teal-600 font-semibold font-display hover:bg-teal-600 hover:text-white transition-colors"
                 >
@@ -168,11 +196,9 @@ export default function BookAppointment() {
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                <h3 className="text-xl font-bold text-navy font-display">
-                  Patient Details
-                </h3>
+                <h3 className="text-xl font-bold text-navy font-display">Patient Details</h3>
                 <p className="text-[13px] text-slate-500 mt-1 mb-5">
-                  Fill in the basics � we'll handle the rest.
+                  Fill in the basics — we&apos;ll handle the rest.
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
@@ -196,20 +222,28 @@ export default function BookAppointment() {
                   </FormField>
                 </div>
 
+                <FormField label="Email (optional)" className="mb-3.5">
+                  <TextField
+                    type="email"
+                    placeholder="you@example.com"
+                    value={form.email}
+                    onChange={(e) => update("email", e.target.value)}
+                  />
+                </FormField>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
-                  <FormField label="Department" error={errors.dept}>
+                  <FormField label="Department">
                     <SelectField
-                      value={form.dept}
-                      onChange={(v) => update("dept", v)}
-                      hasError={!!errors.dept}
-                      placeholder="Choose department�"
+                      value={form.department_id}
+                      onChange={(v) => update("department_id", v)}
+                      placeholder="Choose department…"
                       options={deptOptions}
                     />
                   </FormField>
                   <FormField label="Doctor (optional)">
                     <SelectField
-                      value={form.doctor}
-                      onChange={(v) => update("doctor", v)}
+                      value={form.doctor_id}
+                      onChange={(v) => update("doctor_id", v)}
                       placeholder="Any available doctor"
                       options={doctorOptions}
                     />
@@ -217,17 +251,19 @@ export default function BookAppointment() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-3.5">
-                  <FormField label="Preferred Date" error={errors.date}>
+                  <FormField label="Preferred Date" error={errors.preferred_date}>
                     <DateField
-                      value={form.date}
-                      onChange={(v) => update("date", v)}
-                      hasError={!!errors.date}
+                      value={form.preferred_date}
+                      onChange={(v) => update("preferred_date", v)}
+                      hasError={!!errors.preferred_date}
                     />
                   </FormField>
-                  <FormField label="Time">
-                    <TimePicker
-                      value={form.time}
-                      onChange={(v) => update("time", v)}
+                  <FormField label="Preferred Time">
+                    <SelectField
+                      value={form.time_slot}
+                      onChange={(v) => update("time_slot", v)}
+                      placeholder="Pick a slot"
+                      options={TIME_SLOTS}
                     />
                   </FormField>
                 </div>
@@ -236,18 +272,19 @@ export default function BookAppointment() {
                   <TextArea
                     placeholder="Briefly describe your symptoms or any specific request"
                     rows={3}
-                    value={form.msg}
-                    onChange={(e) => update("msg", e.target.value)}
-                    style={{ minHeight: 78 }}
+                    value={form.message}
+                    onChange={(e) => update("message", e.target.value)}
+                    className="min-h-[78px]"
                   />
                 </FormField>
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 py-4.5 rounded-[10px] bg-sky-400 text-[#04293F] text-base font-semibold font-display hover:bg-sky-500 transition-colors"
+                  disabled={submitting}
+                  className="w-full inline-flex items-center justify-center gap-2 py-4.5 rounded-[10px] bg-sky-400 text-sky-ink text-base font-semibold font-display hover:bg-sky-500 transition-colors disabled:opacity-70"
                 >
                   <Icon name="calendar" size={18} stroke={2} />
-                  Book Appointment
+                  {submitting ? "Submitting…" : "Book Appointment"}
                 </button>
                 <div className="flex items-center gap-1.5 justify-center mt-3.5 text-slate-500 text-[12.5px]">
                   <Icon name="shield" size={13} stroke={1.8} />

@@ -53,7 +53,7 @@ export default function SelectField({
           "flex items-center gap-2 transition-[border-color,box-shadow] duration-150",
           "hover:border-slate-400",
           hasError ? "border-red-400 bg-red-50/40" : "border-slate-300",
-          open && "border-sky-500 shadow-[0_0_0_3px_rgba(14,165,233,.15)]",
+          open && "border-sky-500 shadow-input-focus",
         )}
       >
         <span className={cn("flex-1 text-left truncate", selected ? "text-navy" : "text-slate-400")}>
@@ -71,7 +71,7 @@ export default function SelectField({
       {open && (
         <div
           ref={listRef}
-          className="absolute z-50 mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-[0_12px_40px_-10px_rgba(12,35,64,.18)] overflow-hidden"
+          className="absolute z-50 mt-1.5 w-full bg-white border border-slate-200 rounded-xl shadow-popover overflow-hidden"
         >
           <div className="overflow-y-auto max-h-52 scrollbar-thin py-1">
             {options.map((opt) => (

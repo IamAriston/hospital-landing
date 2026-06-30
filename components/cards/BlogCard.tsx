@@ -24,19 +24,19 @@ export default function BlogCard({
     <article
       className={cn(
         "bg-white border border-slate-200 rounded-2xl overflow-hidden cursor-pointer",
-        "hover:-translate-y-1 hover:shadow-[0_14px_28px_-16px_rgba(12,35,64,.18)] transition-all duration-200 group",
+        "hover:-translate-y-1 hover:shadow-hover-md transition-all duration-200 group",
         featured ? "flex flex-col" : "grid grid-cols-[160px_1fr]",
       )}
     >
       {/* Thumb */}
       <div
         className={cn(
-          "flex items-center justify-center relative bg-linear-to-br",
+          "flex items-center justify-center relative bg-gradient-to-br to-white",
           featured
             ? "h-50 sm:h-70 border-b border-slate-200"
             : "border-r border-slate-200",
+          tone,
         )}
-        style={{ background: `linear-gradient(135deg, ${tone} 0%, #fff 100%)` }}
       >
         <Icon
           name="book"

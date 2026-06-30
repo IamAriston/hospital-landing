@@ -19,12 +19,7 @@ export default function Preloader() {
 
   return (
     <div
-      className="fixed inset-0 z-200 flex items-center justify-center bg-white"
-      style={{
-        opacity: fading ? 0 : 1,
-        transition: "opacity 450ms ease",
-        pointerEvents: fading ? "none" : "all",
-      }}
+      className={`fixed inset-0 z-200 flex items-center justify-center bg-white transition-opacity duration-[450ms] ease-in-out ${fading ? "opacity-0 pointer-events-none" : "opacity-100"}`}
     >
       <div className="flex flex-col items-center gap-5">
         <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-teal-600 to-sky-400 flex items-center justify-center text-white font-bold text-3xl font-display shadow-lg shadow-teal-200">
