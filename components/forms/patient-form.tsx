@@ -1,32 +1,42 @@
 "use client";
 
-import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { FormInput } from "@/components/ui/form-input";
 import { FormSelect } from "@/components/ui/form-select";
 import { FormTextarea } from "@/components/ui/form-textarea";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
+import * as React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 const INSURANCE_OPTIONS = [
-  "None", "CGHS", "ESIC", "Star Health", "HDFC Ergo",
-  "ICICI Lombard", "New India Assurance", "Senior Citizen", "Parents'", "Other",
+  "None",
+  "CGHS",
+  "ESIC",
+  "Star Health",
+  "HDFC Ergo",
+  "ICICI Lombard",
+  "New India Assurance",
+  "Senior Citizen",
+  "Parents'",
+  "Other",
 ];
 
 const schema = z.object({
-  name:       z.string().min(2, "Full name must be at least 2 characters"),
-  age:        z.coerce.number({ message: "Enter a valid age" }).min(0).max(120),
-  sex:        z.enum(["M", "F", "Other"], { message: "Please select gender" }),
-  phone:      z.string().regex(/^\+?[\d\s\-()]{8,15}$/, "Enter a valid phone number"),
-  city:       z.string().min(1, "City is required"),
-  blood:      z.string().min(1, "Please select blood group"),
-  insurance:  z.string().min(1, "Please select insurance / payer"),
-  allergies:  z.string().optional(),
-  notes:      z.string().optional(),
+  name: z.string().min(2, "Full name must be at least 2 characters"),
+  age: z.coerce.number({ message: "Enter a valid age" }).min(0).max(120),
+  sex: z.enum(["M", "F", "Other"], { message: "Please select gender" }),
+  phone: z
+    .string()
+    .regex(/^\+?[\d\s\-()]{8,15}$/, "Enter a valid phone number"),
+  city: z.string().min(1, "City is required"),
+  blood: z.string().min(1, "Please select blood group"),
+  insurance: z.string().min(1, "Please select insurance / payer"),
+  allergies: z.string().optional(),
+  notes: z.string().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -58,25 +68,44 @@ export function PatientForm({ onSuccess, onClose }: PatientFormProps) {
     setSubmitting(false);
     setSubmitted(true);
     onSuccess?.(data);
-    setTimeout(() => { onClose?.(); }, 1200);
+    setTimeout(() => {
+      onClose?.();
+    }, 1200);
   }
 
   if (submitted) {
     return (
       <div className="flex flex-col items-center gap-3 py-8 text-center">
         <div className="w-14 h-14 rounded-full bg-teal-50 flex items-center justify-center">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0D9488" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#0D9488"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <p className="text-[15px] font-semibold text-dash-text">Patient registered!</p>
-        <p className="text-sm text-dash-text-mute">The patient record has been created successfully.</p>
+        <p className="text-[15px] font-semibold text-dash-text">
+          Patient registered!
+        </p>
+        <p className="text-sm text-dash-text-mute">
+          The patient record has been created successfully.
+        </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className="flex flex-col gap-5"
+    >
       {/* Name + Age/Sex row */}
       <FormInput
         label="Full Name"
@@ -107,15 +136,22 @@ export function PatientForm({ onSuccess, onClose }: PatientFormProps) {
                   "flex-1 text-center px-3 py-2.5 rounded-xl border cursor-pointer text-sm font-medium transition-all",
                   watch("sex") === g
                     ? "border-brand-teal bg-brand-teal-50 text-brand-teal"
-                    : "border-dash-border bg-dash-surface text-dash-text-dim hover:border-dash-border-strong"
+                    : "border-dash-border bg-dash-surface text-dash-text-dim hover:border-dash-border-strong",
                 )}
               >
-                <input type="radio" value={g} className="sr-only" {...register("sex")} />
+                <input
+                  type="radio"
+                  value={g}
+                  className="sr-only"
+                  {...register("sex")}
+                />
                 {g === "M" ? "Male" : g === "F" ? "Female" : "Other"}
               </label>
             ))}
           </div>
-          {errors.sex && <p className="text-xs text-red-600 mt-1">{errors.sex.message}</p>}
+          {errors.sex && (
+            <p className="text-xs text-red-600 mt-1">{errors.sex.message}</p>
+          )}
         </div>
       </div>
 
@@ -155,7 +191,9 @@ export function PatientForm({ onSuccess, onClose }: PatientFormProps) {
           error={errors.insurance?.message}
           placeholder="Select insurance"
           value={watch("insurance") ?? ""}
-          onValueChange={(v) => setValue("insurance", v, { shouldValidate: true })}
+          onValueChange={(v) =>
+            setValue("insurance", v, { shouldValidate: true })
+          }
           options={INSURANCE_OPTIONS.map((i) => ({ value: i, label: i }))}
         />
       </div>
@@ -208,8 +246,12 @@ export function PatientPanel({ open, onClose }: PatientPanelProps) {
       <div className="fixed right-0 top-0 h-full w-full max-w-[520px] bg-dash-surface z-50 shadow-pop flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-dash-border">
           <div>
-            <h2 className="text-[17px] font-bold text-dash-text">Register New Patient</h2>
-            <p className="text-xs text-dash-text-mute mt-0.5">Create a new patient record in the system</p>
+            <h2 className="text-[17px] font-bold text-dash-text">
+              Register New Patient
+            </h2>
+            <p className="text-xs text-dash-text-mute mt-0.5">
+              Create a new patient record in the system
+            </p>
           </div>
           <button
             onClick={onClose}

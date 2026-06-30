@@ -1,6 +1,8 @@
 "use client";
 
-import * as React from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,15 +11,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FormInput } from "@/components/ui/form-input";
-import { FormSwitch } from "@/components/ui/form-switch";
 import { FormSelect } from "@/components/ui/form-select";
+import { FormSwitch } from "@/components/ui/form-switch";
 import { FormTextarea } from "@/components/ui/form-textarea";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { ChipRow } from "@/components/dashboard/ui/filter-bar";
 import { cn } from "@/lib/utils";
+import * as React from "react";
 
 type Tab = "profile" | "notifications" | "security" | "preferences";
 

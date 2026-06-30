@@ -1,24 +1,24 @@
 "use client";
 
-import * as React from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { X } from "lucide-react";
-import { FormInput } from "@/components/ui/form-input";
-import { FormTextarea } from "@/components/ui/form-textarea";
-import { FormSwitch } from "@/components/ui/form-switch";
-import { Button } from "@/components/ui/button";
 import { ArrayInput } from "@/components/forms/array-input";
 import { ScheduleInput } from "@/components/forms/schedule-input";
+import { Button } from "@/components/ui/button";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSwitch } from "@/components/ui/form-switch";
+import { FormTextarea } from "@/components/ui/form-textarea";
+import { useServerAction } from "@/hooks/use-server-action";
+import { createDepartment, updateDepartment } from "@/lib/actions/departments";
+import { slugify } from "@/lib/schemas/common";
 import {
   departmentWithDetailsSchema,
   type DepartmentFormValues,
 } from "@/lib/schemas/department";
-import { slugify } from "@/lib/schemas/common";
-import { useServerAction } from "@/hooks/use-server-action";
-import { createDepartment, updateDepartment } from "@/lib/actions/departments";
 import { cn } from "@/lib/utils";
 import type { DepartmentWithDetails } from "@/types/database";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
+import * as React from "react";
+import { Controller, useForm } from "react-hook-form";
 
 interface DepartmentFormProps {
   department?: DepartmentWithDetails | null;

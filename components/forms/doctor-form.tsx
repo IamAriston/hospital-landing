@@ -1,26 +1,25 @@
 "use client";
 
-import * as React from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { X } from "lucide-react";
-import { FormInput } from "@/components/ui/form-input";
-import { FormSelect } from "@/components/ui/form-select";
-import { FormTextarea } from "@/components/ui/form-textarea";
-import { FormSwitch } from "@/components/ui/form-switch";
-import { Button } from "@/components/ui/button";
 import { ImageUpload } from "@/components/forms/image-upload";
 import { ScheduleInput } from "@/components/forms/schedule-input";
-import { slugify, initialsFrom } from "@/lib/schemas/common";
+import { Button } from "@/components/ui/button";
+import { FormInput } from "@/components/ui/form-input";
+import { FormSelect } from "@/components/ui/form-select";
+import { FormSwitch } from "@/components/ui/form-switch";
+import { FormTextarea } from "@/components/ui/form-textarea";
 import { useServerAction } from "@/hooks/use-server-action";
 import { createDoctor, updateDoctor } from "@/lib/actions/doctors";
+import { initialsFrom, slugify } from "@/lib/schemas/common";
 import { cn } from "@/lib/utils";
 import type {
   DepartmentRow,
   DoctorRow,
   Schedule,
 } from "@/types/database";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { X } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface DoctorFormProps {
   doctor?: DoctorRow | null;

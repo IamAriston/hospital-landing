@@ -1,24 +1,24 @@
 "use client";
 
-import * as React from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Search, UserCheck, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { FormInput } from "@/components/ui/form-input";
 import { FormSelect } from "@/components/ui/form-select";
 import { FormTextarea } from "@/components/ui/form-textarea";
-import { Button } from "@/components/ui/button";
-import {
-  walkInAppointmentSchema,
-  type WalkInAppointmentValues,
-} from "@/lib/schemas/appointment";
 import { useServerAction } from "@/hooks/use-server-action";
 import {
   createWalkInAppointment,
   lookupPatientByPhone,
 } from "@/lib/actions/appointments";
+import {
+  walkInAppointmentSchema,
+  type WalkInAppointmentValues,
+} from "@/lib/schemas/appointment";
 import { cn } from "@/lib/utils";
 import type { DepartmentRow, DoctorRow, PatientRow } from "@/types/database";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Search, UserCheck, X } from "lucide-react";
+import * as React from "react";
+import { Controller, useForm } from "react-hook-form";
 
 const TIME_SLOTS = [
   { value: "Morning", label: "Morning (8 AM – 12 PM)" },
