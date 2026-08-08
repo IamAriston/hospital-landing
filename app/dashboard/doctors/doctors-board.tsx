@@ -1,11 +1,13 @@
 "use client";
 
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
 import { Plus, Printer, MoreVertical, Calendar, Star, Edit2, Trash2 } from "lucide-react";
 import { DashCard } from "@/components/dashboard/ui/dash-card";
 import { PageHeader } from "@/components/dashboard/ui/page-header";
 import { DashAvatar } from "@/components/dashboard/ui/dash-avatar";
 import { ActionBtn } from "@/components/dashboard/ui/action-btn";
+import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { MiniStatCard } from "@/components/dashboard/ui/mini-stat-card";
 import { FilterBar, ChipRow, DashSelect, ClearBtn } from "@/components/dashboard/ui/filter-bar";
 import { DoctorPanel } from "@/components/forms/doctor-panel";
@@ -71,6 +73,15 @@ export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
     setPanelOpen(true);
   }
 
+  // Deep-link support: ?q= prefills search, ?action=new opens the add panel.
+  const searchParams = useSearchParams();
+  React.useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) setSearch(q);
+    if (searchParams.get("action") === "new") openCreate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   function openEdit(doctor: DoctorWithDepartment) {
     setEditing(doctor);
     setPanelOpen(true);
@@ -88,6 +99,7 @@ export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
         subtitle={`${filtered.length} of ${counts.total} doctors`}
         actions={
           <>
+            <RefreshButton />
             <ActionBtn variant="secondary" icon={<Printer size={15} />}>
               Roster Sheet
             </ActionBtn>

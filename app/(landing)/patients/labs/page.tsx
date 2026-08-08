@@ -3,6 +3,7 @@ import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import PageHero from "@/components/ui/PageHero";
 import { labPage } from "@/config/patients";
+import { LabLookupForm } from "@/components/forms/lab-lookup-form";
 
 export const metadata: Metadata = {
   title: "Labs & Reports — Aastha Multi Speciality Hospital",
@@ -67,35 +68,11 @@ export default function LabsPage() {
                   </div>
                 </div>
                 <p className="mt-4 text-[13.5px] text-slate-600 leading-relaxed">
-                  Enter your registered phone number and the Report ID printed on your collection slip.
-                  We'll email you a secure link.
+                  Enter your registered phone number and the Report ID printed on your collection slip
+                  to check its status and download it when ready.
                 </p>
 
-                <form className="mt-5 flex flex-col gap-3">
-                  <div>
-                    <label className="text-[12px] font-semibold text-slate-600 mb-1.5 block">Phone number</label>
-                    <input
-                      type="tel"
-                      placeholder="+91 98xxx xxxxx"
-                      className="w-full px-3.5 py-3 rounded-[10px] border border-slate-200 text-[14px] text-navy placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-semibold text-slate-600 mb-1.5 block">Report ID</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. AST-2026-04-123456"
-                      className="w-full px-3.5 py-3 rounded-[10px] border border-slate-200 text-[14px] text-navy placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    className="mt-2 w-full inline-flex items-center justify-center gap-2 py-3 rounded-[10px] bg-teal-600 text-white font-semibold font-display hover:bg-teal-700 transition-colors text-[14px]"
-                  >
-                    <Icon name="arrowSmall" size={16} stroke={2.4} />
-                    Send report link
-                  </button>
-                </form>
+                <LabLookupForm />
 
                 <p className="mt-4 text-[12px] text-slate-400 leading-relaxed">
                   Can't find your Report ID? Email <span className="font-semibold text-navy">care@Aasthahospital.in</span> with your name and visit date.

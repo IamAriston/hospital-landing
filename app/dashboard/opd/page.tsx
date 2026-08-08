@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
+import { getTodayAppointments } from "@/lib/db/appointments";
+import { OpdBoard } from "./opd-board";
 
 export const metadata: Metadata = { title: "Today's OPD" };
+export const dynamic = "force-dynamic";
 
-export default function OpdPage() {
-  return (
-    <div className="px-7 pt-7 pb-[60px]">
-      <h1 className="text-[28px] font-extrabold text-dash-text font-display mb-2">
-        Today&apos;s OPD
-      </h1>
-      <p className="text-[14.5px] text-dash-text-dim">
-        Live OPD queue and consultation management — coming soon.
-      </p>
-    </div>
-  );
+export default async function OpdPage() {
+  const appointments = await getTodayAppointments();
+  const today = new Date().toLocaleDateString("en-IN", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  return <OpdBoard appointments={appointments} today={today} />;
 }

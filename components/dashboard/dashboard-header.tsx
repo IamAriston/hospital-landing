@@ -4,18 +4,18 @@ import * as React from "react";
 import Link from "next/link";
 import {
   PanelLeftClose,
-  Search,
   Plus,
   ChevronDown,
   Moon,
   Sun,
-  Bell,
   Calendar,
   User,
   BedDouble,
   Upload,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { NotificationBell } from "@/components/dashboard/notification-bell";
+import { CommandSearch } from "@/components/dashboard/command-search";
 
 function getGreeting() {
   const h = new Date().getHours();
@@ -35,8 +35,8 @@ interface DashboardTopbarProps {
 const NEW_MENU = [
   { icon: Calendar,  label: "New Appointment", sub: "Book a consultation", href: "/dashboard/appointments" },
   { icon: User,      label: "Register Patient", sub: "Add a new patient",   href: "/dashboard/patients" },
-  { icon: BedDouble, label: "Admit Patient",    sub: "Allocate a bed",      href: "/dashboard" },
-  { icon: Upload,    label: "Upload Lab Report",sub: "Attach to patient",   href: "/dashboard" },
+  // { icon: BedDouble, label: "Admit Patient",    sub: "Allocate a bed",      href: "/dashboard" },
+  // { icon: Upload,    label: "Upload Lab Report",sub: "Attach to patient",   href: "/dashboard" },
 ];
 
 const iconBtnCls =
@@ -70,20 +70,8 @@ export function DashboardTopbar({ collapsed, onCollapse, dark, setDark }: Dashbo
         />
       </button>
 
-      {/* Search */}
-      <div className="flex-1 max-w-[520px] relative">
-        <Search
-          size={17}
-          className="absolute left-[14px] top-1/2 -translate-y-1/2 text-dash-text-mute pointer-events-none"
-        />
-        <input
-          placeholder="Search patients, doctors, appointments…"
-          autoComplete="off"
-          name="dash-search"
-          role="searchbox"
-          className="w-full py-[11px] pr-[60px] pl-[42px] bg-dash-surface-3 border border-transparent rounded-[10px] outline-none text-[14px] text-dash-text transition-[border-color,background-color] duration-[150ms] focus:border-brand-teal focus:bg-dash-surface"
-        />
-      </div>
+      {/* Command search */}
+      <CommandSearch />
 
       {/* Right side */}
       <div className="ml-auto flex items-center gap-[10px]">
@@ -133,10 +121,7 @@ export function DashboardTopbar({ collapsed, onCollapse, dark, setDark }: Dashbo
         </button>
 
         {/* Notifications */}
-        {/* <button title="Notifications" className={iconBtnCls}>
-          <Bell size={17} />
-          <span className="absolute top-2 right-[9px] w-2 h-2 rounded-full bg-brand-red border-2 border-dash-topbar-bg" />
-        </button> */}
+        <NotificationBell />
 
         {/* User pill */}
         {/* <div

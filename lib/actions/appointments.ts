@@ -133,6 +133,7 @@ export async function updateAppointment(
   if (error) return actionError(error.message);
 
   revalidatePath("/dashboard/appointments");
+  revalidatePath("/dashboard/opd");
   revalidatePath("/dashboard");
   return { ok: true, data: data as AppointmentRow };
 }

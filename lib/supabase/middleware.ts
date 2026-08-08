@@ -1,7 +1,41 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  GATE_COOKIE,
+  UNLOCK_PATH,
+  computeGateToken,
+  isGateEnabled,
+  safeEqual,
+} from "@/lib/site-gate";
 
 export async function updateSession(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // ── Shopify-style password gate ─────────────────────────────────────────
+  // Runs before anything else so a locked site reveals nothing (not even the
+  // login page). Disabled automatically when SITE_PASSWORD is unset.
+  if (isGateEnabled()) {
+    const expected = await computeGateToken(process.env.SITE_PASSWORD as string);
+    const provided = request.cookies.get(GATE_COOKIE)?.value ?? "";
+    const unlocked = safeEqual(provided, expected);
+    const isUnlockPath = pathname === UNLOCK_PATH;
+
+    if (!unlocked && !isUnlockPath) {
+      const url = request.nextUrl.clone();
+      url.pathname = UNLOCK_PATH;
+      url.search = "";
+      url.searchParams.set("next", pathname + request.nextUrl.search);
+      return NextResponse.redirect(url);
+    }
+
+    if (unlocked && isUnlockPath) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -29,7 +63,6 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
   const isDashboard = pathname.startsWith("/dashboard");
   const isLogin = pathname === "/login";
 

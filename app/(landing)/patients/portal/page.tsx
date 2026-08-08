@@ -3,6 +3,7 @@ import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import PageHero from "@/components/ui/PageHero";
 import { portalPage } from "@/config/patients";
+import { PortalLookupForm } from "@/components/forms/portal-lookup-form";
 
 export const metadata: Metadata = {
   title: "Patient Portal — Aastha Multi Speciality Hospital",
@@ -31,47 +32,28 @@ export default function PortalPage() {
               <div className="bg-white border border-slate-200 rounded-2xl p-7 sm:p-8 lg:sticky lg:top-24">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 inline-flex items-center justify-center">
-                    <Icon name="user" size={22} stroke={1.8} />
+                    <Icon name="calendar" size={22} stroke={1.8} />
                   </div>
                   <div>
-                    <p className="text-[11px] font-bold text-sky-600 uppercase tracking-[.14em]">Sign in</p>
-                    <h3 className="font-extrabold text-navy font-display text-[18px]">Welcome back</h3>
+                    <p className="text-[11px] font-bold text-sky-600 uppercase tracking-[.14em]">Track</p>
+                    <h3 className="font-extrabold text-navy font-display text-[18px]">Your appointments</h3>
                   </div>
                 </div>
 
-                <form className="mt-6 flex flex-col gap-4">
-                  <div>
-                    <label className="text-[12px] font-semibold text-slate-600 mb-1.5 block">Phone or Email</label>
-                    <input
-                      type="text"
-                      placeholder="+91 98xxx xxxxx"
-                      className="w-full px-3.5 py-3 rounded-[10px] border border-slate-200 text-[14px] text-navy placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-semibold text-slate-600 mb-1.5 block">Password</label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      className="w-full px-3.5 py-3 rounded-[10px] border border-slate-200 text-[14px] text-navy placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    className="mt-2 w-full inline-flex items-center justify-center gap-2 py-3 rounded-[10px] bg-teal-600 text-white font-semibold font-display hover:bg-teal-700 transition-colors text-[14px]"
-                  >
-                    Sign in
-                  </button>
-                  <div className="flex items-center justify-between text-[12.5px]">
-                    <button type="button" className="text-teal-600 font-semibold hover:underline">Forgot password?</button>
-                    <button type="button" className="text-slate-500 hover:text-navy">New here? <span className="font-semibold text-navy">Register</span></button>
-                  </div>
-                </form>
+                <p className="mt-4 text-[13.5px] text-slate-600 leading-relaxed">
+                  Enter the phone number you booked with to see the status of your appointments.
+                </p>
+
+                <PortalLookupForm />
 
                 <div className="mt-6 pt-5 border-t border-slate-100 bg-amber-50 -mx-7 -mb-7 sm:-mx-8 sm:-mb-8 px-7 sm:px-8 py-4 rounded-b-2xl">
                   <p className="text-[12.5px] text-amber-800 leading-relaxed">
-                    <strong className="font-bold">Heads-up:</strong> The patient portal is launching soon. Sign-in here
-                    is a preview. For now, please book an appointment online to access your records.
+                    <strong className="font-bold">Coming soon:</strong> Full sign-in with records and
+                    prescriptions. For now you can track appointments and{" "}
+                    <Link href="/#book" className="font-semibold text-amber-900 underline">
+                      book online
+                    </Link>
+                    .
                   </p>
                 </div>
               </div>

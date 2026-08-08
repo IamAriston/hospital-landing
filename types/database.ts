@@ -25,10 +25,25 @@ export type Schedule = {
 
 export type UserRole = "super_admin" | "admin" | "editor";
 
+export type ProfilePreferences = {
+  phone?: string;
+  title?: string;
+  bio?: string;
+  notifications?: {
+    email?: boolean;
+    sms?: boolean;
+    appointment?: boolean;
+    lab?: boolean;
+  };
+  timezone?: string;
+  language?: string;
+};
+
 export type ProfileRow = {
   id: string;
   full_name: string;
   role: UserRole;
+  preferences: ProfilePreferences;
   created_at: string;
   updated_at: string;
 };
@@ -348,6 +363,39 @@ export type MediaRow = {
   mime_type: string | null;
   alt_text: string;
   uploaded_by: string | null;
+  created_at: string;
+};
+
+// ============================================================
+// Feedback + lab reports
+// ============================================================
+
+export type FeedbackRow = {
+  id: string;
+  name: string;
+  contact: string | null;
+  visit_type: string;
+  department: string | null;
+  rating: number;
+  message: string;
+  is_resolved: boolean;
+  created_at: string;
+};
+export type FeedbackInsert = Omit<FeedbackRow, "id" | "created_at" | "is_resolved"> & {
+  is_resolved?: boolean;
+};
+
+export type LabReportStatus = "processing" | "ready" | "collected";
+export type LabReportRow = {
+  id: string;
+  report_id: string;
+  patient_name: string;
+  patient_phone: string;
+  test_name: string;
+  status: LabReportStatus;
+  collected_at: string | null;
+  ready_at: string | null;
+  file_url: string | null;
   created_at: string;
 };
 

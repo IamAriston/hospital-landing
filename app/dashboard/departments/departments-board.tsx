@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
 import { Plus, Edit2, Trash2 } from "lucide-react";
 import { DashCard } from "@/components/dashboard/ui/dash-card";
 import { PageHeader } from "@/components/dashboard/ui/page-header";
+import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { ActionBtn } from "@/components/dashboard/ui/action-btn";
 import { MiniStatCard } from "@/components/dashboard/ui/mini-stat-card";
 import { FilterBar, ChipRow, ClearBtn } from "@/components/dashboard/ui/filter-bar";
@@ -63,6 +65,16 @@ export function DepartmentsBoard({ departments }: Props) {
     setEditing(null);
     setPanelOpen(true);
   }
+
+  // Deep-link support: ?q= prefills search, ?action=new opens the add panel.
+  const searchParams = useSearchParams();
+  React.useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) setSearch(q);
+    if (searchParams.get("action") === "new") openCreate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   function openEdit(d: DepartmentWithDetails) {
     setEditing(d);
     setPanelOpen(true);
@@ -166,13 +178,16 @@ export function DepartmentsBoard({ departments }: Props) {
         title="Departments"
         subtitle={`${counts.total} departments configured`}
         actions={
-          <ActionBtn
-            variant="primary"
-            icon={<Plus size={15} strokeWidth={2.4} />}
-            onClick={openCreate}
-          >
-            Add Department
-          </ActionBtn>
+          <>
+            <RefreshButton />
+            <ActionBtn
+              variant="primary"
+              icon={<Plus size={15} strokeWidth={2.4} />}
+              onClick={openCreate}
+            >
+              Add Department
+            </ActionBtn>
+          </>
         }
       />
 

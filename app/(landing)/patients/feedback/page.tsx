@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import Icon from "@/components/ui/Icon";
 import PageHero from "@/components/ui/PageHero";
 import { cn } from "@/lib/cn";
+import { submitFeedback } from "@/lib/actions/feedback";
 
 type Visit = "OPD" | "Inpatient" | "Emergency" | "Diagnostics" | "Pharmacy" | "Other";
 
@@ -14,10 +15,25 @@ export default function FeedbackPage() {
   const [hoverRating, setHoverRating] = useState(0);
   const [visit, setVisit] = useState<Visit>("OPD");
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    const form = new FormData(e.currentTarget);
+    setError(null);
+    startTransition(async () => {
+      const res = await submitFeedback({
+        name: String(form.get("name") ?? ""),
+        contact: String(form.get("contact") ?? ""),
+        visit_type: visit,
+        department: String(form.get("department") ?? ""),
+        rating,
+        message: String(form.get("message") ?? ""),
+      });
+      if (res.ok) setSubmitted(true);
+      else setError(res.error);
+    });
   }
 
   return (
@@ -127,6 +143,7 @@ export default function FeedbackPage() {
                     <label className="text-[12px] font-semibold text-slate-600 mb-1.5 block">Your name</label>
                     <input
                       type="text"
+                      name="name"
                       required
                       placeholder="Full name"
                       className="w-full px-3.5 py-3 rounded-[10px] border border-slate-200 text-[14px] text-navy placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
@@ -136,6 +153,7 @@ export default function FeedbackPage() {
                     <label className="text-[12px] font-semibold text-slate-600 mb-1.5 block">Phone or Email</label>
                     <input
                       type="text"
+                      name="contact"
                       required
                       placeholder="So we can follow up if needed"
                       className="w-full px-3.5 py-3 rounded-[10px] border border-slate-200 text-[14px] text-navy placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
@@ -152,6 +170,7 @@ export default function FeedbackPage() {
                     <label className="text-[12px] font-semibold text-slate-600 mb-1.5 block">Department (optional)</label>
                     <input
                       type="text"
+                      name="department"
                       placeholder="e.g. Cardiology"
                       className="w-full px-3.5 py-3 rounded-[10px] border border-slate-200 text-[14px] text-navy placeholder:text-slate-400 focus:outline-none focus:border-teal-500"
                     />
@@ -162,6 +181,7 @@ export default function FeedbackPage() {
                 <div className="mt-7">
                   <label className="text-[12px] font-semibold text-slate-600 mb-1.5 block">Your feedback</label>
                   <textarea
+                    name="message"
                     required
                     rows={5}
                     placeholder="Tell us what worked well and what we can improve. Be as specific as you like — staff names, wait times, anything."
@@ -180,18 +200,24 @@ export default function FeedbackPage() {
                   </span>
                 </label>
 
+                {error && (
+                  <p role="alert" className="mt-5 text-[13px] font-medium text-red-600 text-center">
+                    {error}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  disabled={rating === 0}
+                  disabled={rating === 0 || pending}
                   className={cn(
-                    "mt-7 w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-[10px] font-semibold font-display transition-colors text-[15px]",
-                    rating === 0
+                    "mt-5 w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-[10px] font-semibold font-display transition-colors text-[15px]",
+                    rating === 0 || pending
                       ? "bg-slate-200 text-slate-400 cursor-not-allowed"
                       : "bg-teal-600 text-white hover:bg-teal-700",
                   )}
                 >
-                  Submit feedback
-                  <Icon name="arrowSmall" size={16} stroke={2.4} />
+                  {pending ? "Submitting…" : "Submit feedback"}
+                  {!pending && <Icon name="arrowSmall" size={16} stroke={2.4} />}
                 </button>
 
                 <p className="mt-4 text-[12px] text-slate-400 text-center leading-relaxed">

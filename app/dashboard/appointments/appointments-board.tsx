@@ -1,10 +1,12 @@
 "use client";
 
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { Download, Plus, Calendar } from "lucide-react";
 import { DashCard } from "@/components/dashboard/ui/dash-card";
 import { PageHeader } from "@/components/dashboard/ui/page-header";
+import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { StatusBadge } from "@/components/dashboard/ui/status-badge";
 import { DashAvatar } from "@/components/dashboard/ui/dash-avatar";
 import { ActionBtn } from "@/components/dashboard/ui/action-btn";
@@ -107,6 +109,19 @@ export function AppointmentsBoard({ appointments, departments, doctors }: Props)
     setFilters({ date: "today" });
   }
 
+  // Deep-link support: ?q= prefills search (across all dates), ?action=new opens
+  // the walk-in panel.
+  const searchParams = useSearchParams();
+  React.useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) {
+      setSearch(q);
+      setFilter("date", "all");
+    }
+    if (searchParams.get("action") === "new") setWalkInOpen(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
   const counts: Counts = React.useMemo(() => {
     const today = appointments.filter((a) => dateBucket(a.preferred_date) === "today");
     return {
@@ -124,6 +139,7 @@ export function AppointmentsBoard({ appointments, departments, doctors }: Props)
         subtitle={`${filtered.length} appointment${filtered.length !== 1 ? "s" : ""}`}
         actions={
           <>
+            <RefreshButton />
             <ActionBtn variant="secondary" icon={<Download size={15} />}>
               Export
             </ActionBtn>

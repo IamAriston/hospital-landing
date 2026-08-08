@@ -86,12 +86,29 @@ export default function ContactPage() {
                     </p>
                   </div>
                 </div>
-                <div className="mt-5 rounded-xl overflow-hidden border border-slate-200 h-52 bg-slate-100 flex items-center justify-center text-slate-400">
-                  <div className="text-center">
-                    <Icon name="map" size={36} className="mx-auto mb-2 opacity-25" />
-                    <p className="text-[13px]">Interactive map coming soon</p>
-                  </div>
+                <div className="mt-5 rounded-xl overflow-hidden border border-slate-200 h-52">
+                  <iframe
+                    title={`Map to ${siteConfig.fullName}`}
+                    src={`https://www.google.com/maps?q=${encodeURIComponent(
+                      `${siteConfig.address.line1}, ${siteConfig.address.line2}`,
+                    )}&output=embed`}
+                    className="w-full h-full border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  />
                 </div>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    `${siteConfig.address.line1}, ${siteConfig.address.line2}`,
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold text-teal-600 hover:underline"
+                >
+                  <Icon name="map" size={15} stroke={2} />
+                  Get directions
+                </a>
               </div>
 
               {/* Hours */}

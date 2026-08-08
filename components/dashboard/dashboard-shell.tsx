@@ -4,6 +4,7 @@ import * as React from "react";
 import { usePathname } from "next/navigation";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { DashboardTopbar } from "@/components/dashboard/dashboard-header";
+import { NotificationsProvider } from "@/components/dashboard/notifications-context";
 import { cn } from "@/lib/utils";
 
 export type DashboardProfile = { fullName: string; role: string } | null;
@@ -40,25 +41,27 @@ export function DashboardShell({
   }, [dark]);
 
   return (
-    <div
-      className={cn(
-        "grid min-h-screen bg-dash-bg transition-[grid-template-columns] duration-[220ms] ease-in-out",
-        collapsed ? "grid-cols-[72px_1fr]" : "grid-cols-[244px_1fr]",
-      )}
-    >
-      <AppSidebar collapsed={collapsed} pathname={pathname} profile={profile ?? null} />
+    <NotificationsProvider>
+      <div
+        className={cn(
+          "grid min-h-screen bg-dash-bg transition-[grid-template-columns] duration-[220ms] ease-in-out",
+          collapsed ? "grid-cols-[72px_1fr]" : "grid-cols-[244px_1fr]",
+        )}
+      >
+        <AppSidebar collapsed={collapsed} pathname={pathname} profile={profile ?? null} />
 
-      <div className="flex flex-col min-w-0 overflow-hidden">
-        <DashboardTopbar
-          collapsed={collapsed}
-          onCollapse={() => setCollapsed((c) => !c)}
-          dark={dark}
-          setDark={setDark}
-        />
-        <main className="flex-1 overflow-y-auto bg-dash-bg">
-          {children}
-        </main>
+        <div className="flex flex-col min-w-0 overflow-hidden">
+          <DashboardTopbar
+            collapsed={collapsed}
+            onCollapse={() => setCollapsed((c) => !c)}
+            dark={dark}
+            setDark={setDark}
+          />
+          <main className="flex-1 overflow-y-auto bg-dash-bg">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </NotificationsProvider>
   );
 }

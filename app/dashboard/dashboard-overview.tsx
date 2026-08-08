@@ -17,6 +17,7 @@ import {
 import { StatCard } from "@/components/dashboard/ui/stat-card";
 import { DashCard, DashCardHeader } from "@/components/dashboard/ui/dash-card";
 import { PageHeader } from "@/components/dashboard/ui/page-header";
+import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { StatusBadge } from "@/components/dashboard/ui/status-badge";
 import { DashAvatar } from "@/components/dashboard/ui/dash-avatar";
 import { ActionBtn, ActionLink } from "@/components/dashboard/ui/action-btn";
@@ -134,9 +135,7 @@ export function DashboardOverview({
         subtitle={<>Here&apos;s what&apos;s happening at Astha today · {todayLabel()}</>}
         actions={
           <>
-            <ActionBtn variant="secondary" onClick={() => window.location.reload()}>
-              Refresh
-            </ActionBtn>
+            <RefreshButton />
             <ActionLink href="/dashboard/appointments" variant="secondary">
               View Inbox
             </ActionLink>
