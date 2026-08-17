@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { ImageUpload } from "@/components/forms/image-upload";
 import { ScheduleInput } from "@/components/forms/schedule-input";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { FormSelect } from "@/components/ui/form-select";
 import { FormSwitch } from "@/components/ui/form-switch";
 import { FormTextarea } from "@/components/ui/form-textarea";
 import { useServerAction } from "@/hooks/use-server-action";
+import { useUpload } from "@/hooks/use-upload";
 import { createDoctor, updateDoctor } from "@/lib/actions/doctors";
 import { initialsFrom, slugify } from "@/lib/schemas/common";
 import { cn } from "@/lib/utils";
@@ -68,7 +70,14 @@ const uiSchema = z.object({
       endHour: z.number().int().min(0).max(23),
     })
     .nullable(),
-  photo_url: z.string().url().nullable().or(z.literal("").transform(() => null)),
+  photo_url: z
+    .string()
+    .refine(
+      (v) => v.startsWith("/") || /^https?:\/\//.test(v),
+      "Must be a URL or an uploaded image path",
+    )
+    .nullable()
+    .or(z.literal("").transform(() => null)),
   is_active: z.boolean(),
   is_featured: z.boolean(),
 });
@@ -82,6 +91,11 @@ export function DoctorForm({
   onSaved,
 }: DoctorFormProps) {
   const isEdit = !!doctor;
+
+  // The picked-but-not-yet-uploaded photo. It's uploaded on submit so nothing
+  // is written to disk unless the form is actually saved.
+  const [photoFile, setPhotoFile] = React.useState<File | null>(null);
+  const { upload, uploading } = useUpload({ folder: "doctors" });
 
   const defaults: UiValues = {
     name: doctor?.name ?? "",
@@ -120,11 +134,21 @@ export function DoctorForm({
   );
 
   async function onSubmit(values: UiValues) {
+    // Upload the picked photo now (on submit), overwriting the existing file
+    // in place when one is already stored. Abort the save if the upload fails.
+    let photoUrl = values.photo_url ?? null;
+    if (photoFile) {
+      const uploaded = await upload(photoFile, photoUrl);
+      if (!uploaded) return; // useUpload already surfaced the error toast
+      photoUrl = uploaded;
+    }
+
     // Derive the auto-generated fields here so they never have to live
     // in form state. On edit we keep the existing slug + avatar_color
     // (slug is the public URL; avatar tint is whatever was stored).
     const payload = {
       ...values,
+      photo_url: photoUrl,
       slug: isEdit ? doctor!.slug : slugify(values.name),
       initials: initialsFrom(values.name),
       avatar_color: isEdit ? doctor!.avatar_color : pickAvatarColor(values.name),
@@ -232,7 +256,7 @@ export function DoctorForm({
             <ImageUpload
               value={field.value ?? null}
               onChange={field.onChange}
-              folder="doctors"
+              onFileSelect={setPhotoFile}
               label="Profile photo"
             />
           )}
@@ -267,15 +291,21 @@ export function DoctorForm({
       </div>
 
       <footer className="flex justify-end gap-2 px-6 py-4 border-t border-dash-border bg-dash-surface">
-        <Button type="button" variant="outline" onClick={onClose} disabled={action.pending}>
+        <Button type="button" variant="outline" onClick={onClose} disabled={action.pending || uploading}>
           Cancel
         </Button>
         <Button
           type="submit"
-          disabled={action.pending}
+          disabled={action.pending || uploading}
           className={cn("bg-teal-600 hover:bg-teal-700 text-white")}
         >
-          {action.pending ? "Saving…" : isEdit ? "Save changes" : "Create doctor"}
+          {uploading
+            ? "Uploading…"
+            : action.pending
+              ? "Saving…"
+              : isEdit
+                ? "Save changes"
+                : "Create doctor"}
         </Button>
       </footer>
     </form>

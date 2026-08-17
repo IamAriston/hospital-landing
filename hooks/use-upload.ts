@@ -15,12 +15,14 @@ export function useUpload({ folder = "uploads", onSuccess }: Options = {}) {
   const [error, setError] = React.useState<string | null>(null);
 
   const upload = React.useCallback(
-    async (file: File) => {
+    async (file: File, replaceUrl?: string | null) => {
       setUploading(true);
       setError(null);
       const fd = new FormData();
       fd.append("file", file);
       fd.append("folder", folder);
+      // Passing the current URL lets the server overwrite the same object.
+      if (replaceUrl) fd.append("replaceUrl", replaceUrl);
       const result = await uploadImage(fd);
       setUploading(false);
       if (!result.ok) {

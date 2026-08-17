@@ -15,6 +15,7 @@ type Card = {
   initial: string;
   tone: string;
   toneBg: string;
+  photoUrl: string | null;
 };
 
 export function DoctorsCarousel({ cards }: { cards: Card[] }) {

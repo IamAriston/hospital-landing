@@ -1,5 +1,12 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ChipOption {
   value: string;
@@ -46,32 +53,54 @@ export function ChipRow({ options, value, onChange }: ChipRowProps) {
   );
 }
 
-interface DashSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface DashSelectProps {
   options: ChipOption[];
   placeholder?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  disabled?: boolean;
+  className?: string;
 }
 
+/**
+ * Filter-bar select built on the design-system Radix Select so it matches the
+ * form selects. When a `placeholder` is given it's exposed as an "all" option
+ * (the shared convention for "no filter") and shown as the trigger label.
+ */
 export function DashSelect({
   options,
   placeholder,
+  value,
+  onValueChange,
+  disabled,
   className,
-  ...props
 }: DashSelectProps) {
+  // Expose the placeholder as the shared "all" option, unless the caller
+  // already supplied one.
+  const hasAll = options.some((o) => o.value === "all");
+  const allOptions =
+    placeholder && !hasAll
+      ? [{ value: "all", label: placeholder }, ...options]
+      : options;
+
   return (
-    <select
-      className={cn(
-        "px-3 py-[7px] rounded-lg border border-dash-border bg-dash-surface text-[13px] font-medium text-dash-text cursor-pointer outline-none focus:border-brand-teal",
-        className,
-      )}
-      {...props}
-    >
-      {placeholder && <option value="all">{placeholder}</option>}
-      {options.map((o) => (
-        <option key={o.value} value={o.value}>
-          {o.label}
-        </option>
-      ))}
-    </select>
+    <Select value={value} onValueChange={onValueChange} disabled={disabled}>
+      <SelectTrigger
+        className={cn(
+          "h-[38px] data-[size=default]:h-[38px] min-w-[160px] rounded-lg border-dash-border bg-dash-surface py-0 text-[13px] font-medium text-dash-text focus-visible:border-brand-teal focus-visible:ring-0",
+          className,
+        )}
+      >
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        {allOptions.map((o) => (
+          <SelectItem key={o.value} value={o.value}>
+            {o.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 

@@ -37,6 +37,7 @@ export function doctorRowToCardProps(
   initial: string;
   tone: string;
   toneBg: string;
+  photoUrl: string | null;
 } {
   const palette = TONE_PALETTE[hashCode(row.id) % TONE_PALETTE.length];
   return {
@@ -50,5 +51,6 @@ export function doctorRowToCardProps(
     initial: row.initials,
     tone: palette.tone,
     toneBg: palette.toneBg,
+    photoUrl: row.photo_url ?? null,
   };
 }

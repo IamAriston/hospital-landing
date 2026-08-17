@@ -63,8 +63,17 @@ export function DoctorsList({ items, deptNames }: DoctorsListProps) {
                     className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-sky-200 hover:shadow-hover-navy transition-all duration-200"
                   >
                     <div className={`h-28 flex items-center px-6 gap-5 bg-gradient-to-r to-white ${card.tone}`}>
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-extrabold font-display text-navy border-2 border-white shadow-md shrink-0 ${card.toneBg}`}>
-                        {card.initial}
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-extrabold font-display text-navy border-2 border-white shadow-md shrink-0 overflow-hidden ${card.toneBg}`}>
+                        {card.photoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={card.photoUrl}
+                            alt={card.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          card.initial
+                        )}
                       </div>
                       <span className={`inline-flex items-center gap-1.5 text-[11.5px] font-semibold rounded-full px-3 py-1 border ${today ? "bg-green-100 text-green-700 border-green-200" : "bg-slate-100 text-slate-600 border-slate-200"}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${today ? "bg-green-500" : "bg-slate-400"}`} />

@@ -19,7 +19,15 @@ export const doctorSchema = z.object({
     .regex(HEX, "Use a hex color like #0D9488")
     .default("#E0F2FE"),
   bio: z.string().trim().optional().nullable(),
-  photo_url: z.string().url().optional().nullable().or(z.literal("").transform(() => null)),
+  photo_url: z
+    .string()
+    .refine(
+      (v) => v.startsWith("/") || /^https?:\/\//.test(v),
+      "Must be a URL or an uploaded image path",
+    )
+    .optional()
+    .nullable()
+    .or(z.literal("").transform(() => null)),
   qualifications: z.string().trim().optional().nullable(),
   is_active: z.boolean().default(true),
   is_featured: z.boolean().default(false),

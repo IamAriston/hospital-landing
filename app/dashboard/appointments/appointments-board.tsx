@@ -175,16 +175,16 @@ export function AppointmentsBoard({ appointments, departments, doctors }: Props)
         <div className="w-px h-6 bg-dash-border" />
         <DashSelect
           value={(filters.status as string) ?? "all"}
-          onChange={(e) =>
-            setFilter("status", e.target.value === "all" ? null : e.target.value)
+          onValueChange={(v) =>
+            setFilter("status", v === "all" ? null : v)
           }
           options={STATUS_OPTIONS}
           placeholder="All Statuses"
         />
         <DashSelect
           value={(filters.department as string) ?? "all"}
-          onChange={(e) =>
-            setFilter("department", e.target.value === "all" ? null : e.target.value)
+          onValueChange={(v) =>
+            setFilter("department", v === "all" ? null : v)
           }
           options={deptOptions}
           placeholder="All Departments"
@@ -193,7 +193,7 @@ export function AppointmentsBoard({ appointments, departments, doctors }: Props)
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search patient…"
-          className="px-3 py-[7px] rounded-lg border border-dash-border bg-dash-surface text-[13px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal min-w-[180px] transition-all"
+          className="h-[38px] px-3 rounded-lg border border-dash-border bg-dash-surface text-[13px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal min-w-[180px] transition-all"
         />
         <ClearBtn
           onClick={() => {

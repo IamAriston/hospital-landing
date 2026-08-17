@@ -207,7 +207,7 @@ export function DepartmentsBoard({ departments }: Props) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search departments…"
-          className="px-3 py-[7px] rounded-lg border border-dash-border bg-dash-surface text-[13px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal min-w-[180px] transition-all"
+          className="h-[38px] px-3 rounded-lg border border-dash-border bg-dash-surface text-[13px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal min-w-[180px] transition-all"
         />
         <ClearBtn
           onClick={() => {

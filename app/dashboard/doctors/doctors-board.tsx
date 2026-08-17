@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
-import { Plus, Printer, MoreVertical, Calendar, Star, Edit2, Trash2 } from "lucide-react";
+import { Plus, Printer, Edit2, Trash2 } from "lucide-react";
 import { DashCard } from "@/components/dashboard/ui/dash-card";
 import { PageHeader } from "@/components/dashboard/ui/page-header";
 import { DashAvatar } from "@/components/dashboard/ui/dash-avatar";
@@ -129,8 +129,8 @@ export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
         />
         <DashSelect
           value={(filters.department as string) ?? "all"}
-          onChange={(e) =>
-            setFilter("department", e.target.value === "all" ? null : e.target.value)
+          onValueChange={(v) =>
+            setFilter("department", v === "all" ? null : v)
           }
           options={deptOptions}
           placeholder="All Departments"
@@ -139,7 +139,7 @@ export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search doctors…"
-          className="px-3 py-[7px] rounded-lg border border-dash-border bg-dash-surface text-[13px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal min-w-[180px] transition-all"
+          className="h-[38px] px-3 rounded-lg border border-dash-border bg-dash-surface text-[13px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal min-w-[180px] transition-all"
         />
         <ClearBtn
           onClick={() => {
@@ -211,7 +211,16 @@ function DoctorCard({
   return (
     <DashCard noPad className="overflow-hidden dash-card-hover group">
       <div className="p-5 pb-4 border-b border-dash-border flex gap-3.5">
-        <DashAvatar name={d.name} size={54} charIndex={4} stripPrefix="Dr. " />
+        {d.photo_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={d.photo_url}
+            alt={d.name}
+            className="w-[54px] h-[54px] rounded-full object-cover shrink-0"
+          />
+        ) : (
+          <DashAvatar name={d.name} size={54} charIndex={4} stripPrefix="Dr. " />
+        )}
         <div className="flex-1 min-w-0">
           <div className="flex justify-between gap-2 items-start">
             <h3 className="text-[15px] font-bold text-dash-text leading-snug truncate">
@@ -267,12 +276,6 @@ function DoctorCard({
           className="px-2.5 py-[7px] border border-dash-border bg-dash-surface text-red-600 rounded-lg cursor-pointer flex items-center justify-center hover:border-red-200 hover:bg-red-50 transition-all"
         >
           <Trash2 size={14} />
-        </button>
-        <button
-          aria-label="More"
-          className="px-2.5 py-[7px] border border-dash-border bg-dash-surface text-dash-text-dim rounded-lg cursor-pointer flex items-center justify-center hover:border-dash-border-strong hover:text-dash-text transition-all"
-        >
-          <MoreVertical size={14} />
         </button>
       </div>
     </DashCard>

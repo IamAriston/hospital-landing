@@ -12,27 +12,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FormInput } from "@/components/ui/form-input";
-import { FormSelect } from "@/components/ui/form-select";
-import { FormSwitch } from "@/components/ui/form-switch";
 import { FormTextarea } from "@/components/ui/form-textarea";
-import { Separator } from "@/components/ui/separator";
 import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { useServerAction } from "@/hooks/use-server-action";
-import {
-  updateProfile,
-  updatePreferences,
-  updatePassword,
-} from "@/lib/actions/profile";
+import { updateProfile, updatePassword } from "@/lib/actions/profile";
 import { cn } from "@/lib/utils";
 import type { ProfileRow } from "@/types/database";
 
-type Tab = "profile" | "notifications" | "security" | "preferences";
+// Notifications and Preferences tabs are hidden until their features are wired
+// to real functionality.
+type Tab = "profile" | "security";
 
 const TABS: { value: Tab; label: string }[] = [
   { value: "profile", label: "Profile" },
-  { value: "notifications", label: "Notifications" },
   { value: "security", label: "Security" },
-  { value: "preferences", label: "Preferences" },
 ];
 
 const ROLE_LABEL: Record<string, string> = {
@@ -61,7 +54,6 @@ export function SettingsBoard({
 }) {
   const [activeTab, setActiveTab] = React.useState<Tab>("profile");
   const prefs = profile.preferences ?? {};
-  const notif = prefs.notifications ?? {};
 
   // Profile fields
   const [fullName, setFullName] = React.useState(profile.full_name);
@@ -69,31 +61,13 @@ export function SettingsBoard({
   const [title, setTitle] = React.useState(prefs.title ?? "");
   const [bio, setBio] = React.useState(prefs.bio ?? "");
 
-  // Notification prefs
-  const [emailNotifs, setEmailNotifs] = React.useState(notif.email ?? true);
-  const [smsNotifs, setSmsNotifs] = React.useState(notif.sms ?? true);
-  const [appointmentAlerts, setAppointmentAlerts] = React.useState(
-    notif.appointment ?? true,
-  );
-  const [labAlerts, setLabAlerts] = React.useState(notif.lab ?? false);
-
   // Security
   const [current, setCurrent] = React.useState("");
   const [next, setNext] = React.useState("");
   const [confirm, setConfirm] = React.useState("");
 
-  // Regional
-  const [timezone, setTimezone] = React.useState(prefs.timezone ?? "asia-kolkata");
-  const [language, setLanguage] = React.useState(prefs.language ?? "en");
-
   const profileAction = useServerAction(updateProfile, {
     successMessage: "Profile updated",
-  });
-  const notifAction = useServerAction(updatePreferences, {
-    successMessage: "Notification preferences saved",
-  });
-  const prefsAction = useServerAction(updatePreferences, {
-    successMessage: "Preferences saved",
   });
   const passwordAction = useServerAction(updatePassword, {
     successMessage: "Password updated",
@@ -208,72 +182,6 @@ export function SettingsBoard({
         </div>
       )}
 
-      {/* Notifications */}
-      {activeTab === "notifications" && (
-        <div className="flex flex-col gap-5">
-          <Card>
-            <CardHeader>
-              <CardTitle>Notification Channels</CardTitle>
-              <CardDescription>Choose how you want to be notified.</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              <FormSwitch
-                label="Email notifications"
-                description="Receive alerts and summaries to your email."
-                checked={emailNotifs}
-                onCheckedChange={setEmailNotifs}
-              />
-              <Separator />
-              <FormSwitch
-                label="SMS notifications"
-                description="Get urgent alerts via SMS."
-                checked={smsNotifs}
-                onCheckedChange={setSmsNotifs}
-              />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Alert Types</CardTitle>
-              <CardDescription>Select which events trigger notifications.</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              <FormSwitch
-                label="Appointment alerts"
-                description="New bookings, cancellations, and confirmations."
-                checked={appointmentAlerts}
-                onCheckedChange={setAppointmentAlerts}
-              />
-              <Separator />
-              <FormSwitch
-                label="Lab result alerts"
-                description="Notify when lab results are ready or overdue."
-                checked={labAlerts}
-                onCheckedChange={setLabAlerts}
-              />
-              <div className="flex justify-end mt-2">
-                <Button
-                  disabled={notifAction.pending}
-                  onClick={() =>
-                    notifAction.run({
-                      notifications: {
-                        email: emailNotifs,
-                        sms: smsNotifs,
-                        appointment: appointmentAlerts,
-                        lab: labAlerts,
-                      },
-                    })
-                  }
-                >
-                  {notifAction.pending ? "Saving…" : "Save preferences"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
       {/* Security */}
       {activeTab === "security" && (
         <div className="flex flex-col gap-5">
@@ -314,47 +222,6 @@ export function SettingsBoard({
                   onClick={() => passwordAction.run({ current, next, confirm })}
                 >
                   {passwordAction.pending ? "Updating…" : "Update password"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {/* Preferences */}
-      {activeTab === "preferences" && (
-        <div className="flex flex-col gap-5">
-          <Card>
-            <CardHeader>
-              <CardTitle>Regional</CardTitle>
-              <CardDescription>Set your timezone and language.</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4 sm:grid-cols-2">
-              <FormSelect
-                label="Timezone"
-                value={timezone}
-                onValueChange={setTimezone}
-                options={[
-                  { value: "asia-kolkata", label: "Asia/Kolkata (IST)" },
-                  { value: "utc", label: "UTC" },
-                  { value: "asia-dubai", label: "Asia/Dubai" },
-                ]}
-              />
-              <FormSelect
-                label="Language"
-                value={language}
-                onValueChange={setLanguage}
-                options={[
-                  { value: "en", label: "English" },
-                  { value: "hi", label: "Hindi" },
-                ]}
-              />
-              <div className="sm:col-span-2 flex justify-end">
-                <Button
-                  disabled={prefsAction.pending}
-                  onClick={() => prefsAction.run({ timezone, language })}
-                >
-                  {prefsAction.pending ? "Saving…" : "Save preferences"}
                 </Button>
               </div>
             </CardContent>

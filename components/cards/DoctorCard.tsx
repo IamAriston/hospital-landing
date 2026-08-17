@@ -13,6 +13,7 @@ interface DoctorCardProps {
   initial: string;
   tone: string;
   toneBg?: string;
+  photoUrl?: string | null;
 }
 
 export default function DoctorCard({
@@ -24,6 +25,7 @@ export default function DoctorCard({
   schedule,
   initial,
   tone,
+  photoUrl,
 }: DoctorCardProps) {
   const today = isAvailableToday(schedule);
   const label = availabilityLabel(schedule);
@@ -34,8 +36,17 @@ export default function DoctorCard({
       <div
         className={`relative flex items-center justify-center border-b border-slate-200 aspect-square bg-gradient-to-br to-white ${tone}`}
       >
-        <div className="w-30 h-30 rounded-full bg-white border-[3px] border-white shadow-avatar flex items-center justify-center text-navy font-display text-[36px] font-bold">
-          {initial}
+        <div className="w-30 h-30 rounded-full bg-white border-[3px] border-white shadow-avatar flex items-center justify-center text-navy font-display text-[36px] font-bold overflow-hidden">
+          {photoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={photoUrl}
+              alt={name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            initial
+          )}
         </div>
         <span
           className={`absolute top-3 left-3 border px-2.5 py-1 rounded-full text-[11px] font-semibold inline-flex items-center gap-1.5 ${
