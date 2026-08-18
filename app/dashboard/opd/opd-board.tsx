@@ -11,6 +11,7 @@ import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { useNotifications } from "@/components/dashboard/notifications-context";
 import { useServerAction } from "@/hooks/use-server-action";
 import { updateAppointment } from "@/lib/actions/appointments";
+import { CheckInPanel } from "@/components/forms/admin-appointment-form";
 import { cn } from "@/lib/utils";
 import type { AppointmentWithRelations, AppointmentStatus, TimeSlot } from "@/types/database";
 
@@ -22,10 +23,12 @@ const SLOTS: { value: TimeSlot; label: string; icon: React.ElementType; hint: st
 
 function QueueRow({ a }: { a: AppointmentWithRelations }) {
   const action = useServerAction(updateAppointment, { successMessage: "Queue updated" });
+  const [checkInOpen, setCheckInOpen] = React.useState(false);
 
   const setStatus = (status: AppointmentStatus) => action.run(a.id, { status });
 
   return (
+    <>
     <div className="flex items-center gap-3 p-3 rounded-xl border border-dash-border bg-dash-surface">
       <DashAvatar name={a.patient_name} size={40} />
       <div className="flex-1 min-w-0">
@@ -52,9 +55,10 @@ function QueueRow({ a }: { a: AppointmentWithRelations }) {
         </a>
         {a.status !== "confirmed" && (
           <button
-            onClick={() => setStatus("confirmed")}
+            onClick={() => setCheckInOpen(true)}
             disabled={action.pending}
-            aria-label="Mark confirmed"
+            aria-label="Check in and confirm"
+            title="Check in & confirm"
             className="w-8 h-8 rounded-lg border border-green-200 bg-green-50 flex items-center justify-center text-green-700 hover:bg-green-100 transition-colors disabled:opacity-50"
           >
             <Check size={15} />
@@ -72,6 +76,15 @@ function QueueRow({ a }: { a: AppointmentWithRelations }) {
         )}
       </div>
     </div>
+
+    {checkInOpen && (
+      <CheckInPanel
+        appointment={a}
+        onClose={() => setCheckInOpen(false)}
+        onDone={() => setCheckInOpen(false)}
+      />
+    )}
+    </>
   );
 }
 

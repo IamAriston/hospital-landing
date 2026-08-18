@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
 import { Plus, Printer, Edit2, Trash2 } from "lucide-react";
 import { DashCard } from "@/components/dashboard/ui/dash-card";
 import { PageHeader } from "@/components/dashboard/ui/page-header";
@@ -10,17 +9,28 @@ import { ActionBtn } from "@/components/dashboard/ui/action-btn";
 import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { MiniStatCard } from "@/components/dashboard/ui/mini-stat-card";
 import { FilterBar, ChipRow, DashSelect, ClearBtn } from "@/components/dashboard/ui/filter-bar";
+import { TableSearch } from "@/components/dashboard/ui/table-search";
+import { Pagination } from "@/components/dashboard/ui/pagination";
+import { useTableQuery } from "@/hooks/use-table-query";
 import { DoctorPanel } from "@/components/forms/doctor-panel";
 import { ConfirmDialog } from "@/components/dashboard/confirm-dialog";
-import { useResourceTable } from "@/hooks/use-resource-table";
 import { useServerAction } from "@/hooks/use-server-action";
 import { deleteDoctor } from "@/lib/actions/doctors";
 import { formatOpd } from "@/lib/schedule";
 import { cn } from "@/lib/utils";
 import type { DepartmentRow, DoctorWithDepartment } from "@/types/database";
 
+type DoctorStats = { total: number; active: number; inactive: number; featured: number };
+
 interface DoctorsBoardProps {
   doctors: DoctorWithDepartment[];
+  total: number;
+  page: number;
+  pageSize: number;
+  search: string;
+  status: string;
+  department: string;
+  stats: DoctorStats;
   departments: DepartmentRow[];
 }
 
@@ -31,37 +41,22 @@ const STATUS_CHIPS = [
   { value: "featured", label: "Featured" },
 ];
 
-export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
+export function DoctorsBoard({
+  doctors,
+  total,
+  page,
+  pageSize,
+  status,
+  department,
+  stats,
+  departments,
+}: DoctorsBoardProps) {
+  const { get, setParams } = useTableQuery();
   const [panelOpen, setPanelOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<DoctorWithDepartment | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<DoctorWithDepartment | null>(null);
 
-  const {
-    search,
-    setSearch,
-    filters,
-    setFilter,
-    paged,
-    filtered,
-  } = useResourceTable<DoctorWithDepartment>({
-    rows: doctors,
-    searchKeys: ["name", "specialty"],
-    filterFn: (row, f) => {
-      if (f.status === "active" && !row.is_active) return false;
-      if (f.status === "inactive" && row.is_active) return false;
-      if (f.status === "featured" && !row.is_featured) return false;
-      if (f.department && row.department_id !== f.department) return false;
-      return true;
-    },
-    pageSize: 50,
-  });
-
-  const counts = {
-    total: doctors.length,
-    active: doctors.filter((d) => d.is_active).length,
-    inactive: doctors.filter((d) => !d.is_active).length,
-    featured: doctors.filter((d) => d.is_featured).length,
-  };
+  const counts = stats;
 
   const deleteAction = useServerAction(deleteDoctor, {
     successMessage: "Doctor deleted",
@@ -73,14 +68,10 @@ export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
     setPanelOpen(true);
   }
 
-  // Deep-link support: ?q= prefills search, ?action=new opens the add panel.
-  const searchParams = useSearchParams();
+  // ?action=new opens the add panel (e.g. from command search).
   React.useEffect(() => {
-    const q = searchParams.get("q");
-    if (q) setSearch(q);
-    if (searchParams.get("action") === "new") openCreate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+    if (get("action") === "new") openCreate();
+  }, [get]);
 
   function openEdit(doctor: DoctorWithDepartment) {
     setEditing(doctor);
@@ -96,7 +87,7 @@ export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
     <div className="p-7 pb-16">
       <PageHeader
         title="Doctor Roster"
-        subtitle={`${filtered.length} of ${counts.total} doctors`}
+        subtitle={`${total} of ${counts.total} doctors`}
         actions={
           <>
             <RefreshButton />
@@ -124,41 +115,31 @@ export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
       <FilterBar>
         <ChipRow
           options={STATUS_CHIPS}
-          value={(filters.status as string) ?? "all"}
-          onChange={(v) => setFilter("status", v === "all" ? null : v)}
+          value={status}
+          onChange={(v) => setParams({ status: v === "all" ? null : v })}
         />
         <DashSelect
-          value={(filters.department as string) ?? "all"}
-          onValueChange={(v) =>
-            setFilter("department", v === "all" ? null : v)
-          }
+          value={department}
+          onValueChange={(v) => setParams({ department: v === "all" ? null : v })}
           options={deptOptions}
           placeholder="All Departments"
         />
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search doctors…"
-          className="h-[38px] px-3 rounded-lg border border-dash-border bg-dash-surface text-[13px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal min-w-[180px] transition-all"
-        />
+        <TableSearch placeholder="Search doctors…" />
         <ClearBtn
-          onClick={() => {
-            setFilter("status", null);
-            setFilter("department", null);
-            setSearch("");
-          }}
+          show={["status", "department", "q"].some((k) => get(k))}
+          onClick={() => setParams({ status: null, department: null, q: null })}
         />
       </FilterBar>
 
-      {paged.length === 0 ? (
+      {doctors.length === 0 ? (
         <DashCard className="py-16 text-center text-dash-text-mute text-sm">
-          {doctors.length === 0
+          {counts.total === 0
             ? "No doctors yet. Click Add Doctor to create the first one."
             : "No doctors match the current filters."}
         </DashCard>
       ) : (
         <div className="grid gap-[18px] grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
-          {paged.map((d) => (
+          {doctors.map((d) => (
             <DoctorCard
               key={d.id}
               d={d}
@@ -168,6 +149,8 @@ export function DoctorsBoard({ doctors, departments }: DoctorsBoardProps) {
           ))}
         </div>
       )}
+
+      <Pagination page={page} pageSize={pageSize} total={total} />
 
       <DoctorPanel
         open={panelOpen}

@@ -106,12 +106,15 @@ export function DashSelect({
 
 interface ClearBtnProps {
   onClick: () => void;
+  /** Only render when at least one filter is active. Defaults to true. */
+  show?: boolean;
 }
 
-export function ClearBtn({ onClick }: ClearBtnProps) {
+export function ClearBtn({ onClick, show = true }: ClearBtnProps) {
+  if (!show) return null;
   return (
     <button
-      className="ml-auto text-[13.5px] font-semibold text-dash-text-dim hover:text-dash-text px-2.5 py-1.5 rounded-lg hover:bg-dash-surface-3 transition-all"
+      className="ml-auto inline-flex items-center gap-1 text-[13.5px] font-semibold text-red-600 hover:text-red-700 px-2.5 py-1.5 rounded-lg hover:bg-red-50 transition-all"
       onClick={onClick}
     >
       ✕ Clear

@@ -7,10 +7,11 @@ import { FormTextarea } from "@/components/ui/form-textarea";
 import { useServerAction } from "@/hooks/use-server-action";
 import { createPatient, updatePatient } from "@/lib/actions/patients";
 import { cn } from "@/lib/utils";
-import type { PatientRow } from "@/types/database";
+import type { ActionResult, PatientRow } from "@/types/database";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import type { ReactNode } from "react";
 import { z } from "zod";
 
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] as const;
@@ -42,31 +43,69 @@ const uiSchema = z.object({
     .optional()
     .or(z.literal("")),
   age: z
-    .union([z.coerce.number().int().min(0).max(130), z.literal("")])
-    .optional(),
-  sex: z.enum(["M", "F", "Other"]).nullable(),
+    .union([z.coerce.number().int().min(0, "Enter a valid age").max(130, "Enter a valid age"), z.literal("")])
+    .refine((v) => v !== "", "Age is required"),
+  sex: z
+    .enum(["M", "F", "Other"])
+    .nullable()
+    .refine((v) => v !== null, "Select a gender"),
   city: z.string().trim().optional(),
-  blood_group: z.enum(BLOOD_GROUPS).nullable(),
+  blood_group: z
+    .enum(BLOOD_GROUPS)
+    .nullable()
+    .refine((v) => v !== null, "Select a blood group"),
   insurance: z.string().trim().optional(),
   allergies: z.string().trim().optional(),
   notes: z.string().trim().optional(),
+  guardian_name: z.string().trim().optional(),
 });
 
 type UiValues = z.input<typeof uiSchema>;
 
 interface PatientFormProps {
   patient?: PatientRow | null;
+  /** Seed values for a brand-new record (e.g. from a booking) when there is no patient row yet. */
+  prefill?: { name?: string; phone?: string; email?: string | null };
+  /** Header title override. */
+  title?: string;
+  /** Header subtitle override. */
+  subtitle?: string;
+  /** Submit button label override. */
+  submitLabel?: string;
+  /** Submit button label while pending. */
+  submitPendingLabel?: string;
+  /** Toast on success. */
+  successMessage?: string;
+  /** Optional banner rendered at the top of the form body (e.g. a warning). */
+  banner?: ReactNode;
+  /**
+   * Replaces the default create/update action. Receives the normalised patient
+   * payload; used by check-in to upsert + confirm in one step.
+   */
+  overrideAction?: (input: unknown) => Promise<ActionResult<PatientRow>>;
   onClose: () => void;
   onSaved?: (patient: PatientRow) => void;
 }
 
-export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
+export function PatientForm({
+  patient,
+  prefill,
+  title,
+  subtitle,
+  submitLabel,
+  submitPendingLabel,
+  successMessage,
+  banner,
+  overrideAction,
+  onClose,
+  onSaved,
+}: PatientFormProps) {
   const isEdit = !!patient;
 
   const defaults: UiValues = {
-    name: patient?.name ?? "",
-    phone: patient?.phone ?? "",
-    email: patient?.email ?? "",
+    name: patient?.name ?? prefill?.name ?? "",
+    phone: patient?.phone ?? prefill?.phone ?? "",
+    email: patient?.email ?? prefill?.email ?? "",
     age: patient?.age ?? "",
     sex: patient?.sex ?? null,
     city: patient?.city ?? "",
@@ -74,6 +113,7 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
     insurance: patient?.insurance ?? "",
     allergies: patient?.allergies ?? "",
     notes: patient?.notes ?? "",
+    guardian_name: patient?.guardian_name ?? "",
   };
 
   const {
@@ -89,9 +129,10 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
   });
 
   const action = useServerAction(
-    isEdit ? (input: unknown) => updatePatient(patient!.id, input) : createPatient,
+    overrideAction ??
+      (isEdit ? (input: unknown) => updatePatient(patient!.id, input) : createPatient),
     {
-      successMessage: isEdit ? "Patient updated" : "Patient registered",
+      successMessage: successMessage ?? (isEdit ? "Patient updated" : "Patient registered"),
       onSuccess: (data) => {
         onSaved?.(data);
         onClose();
@@ -112,6 +153,7 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
       insurance: values.insurance || undefined,
       allergies: values.allergies || undefined,
       notes: values.notes || undefined,
+      guardian_name: values.guardian_name || undefined,
     };
     await action.run(payload);
   }
@@ -123,12 +165,13 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
       <header className="flex items-center justify-between px-6 py-4 border-b border-dash-border">
         <div>
           <h2 className="text-lg font-bold text-dash-text font-display">
-            {isEdit ? "Edit Patient" : "Register New Patient"}
+            {title ?? (isEdit ? "Edit Patient" : "Register New Patient")}
           </h2>
           <p className="text-xs text-dash-text-mute mt-0.5">
-            {isEdit
-              ? "Update this patient record"
-              : "Create a new patient record in the system"}
+            {subtitle ??
+              (isEdit
+                ? "Update this patient record"
+                : "Create a new patient record in the system")}
           </p>
         </div>
         <button
@@ -142,6 +185,7 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
       </header>
 
       <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+        {banner}
         <FormInput
           label="Full Name"
           required
@@ -173,12 +217,15 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
             label="Age (years)"
             type="number"
             min={0}
+            required
             placeholder="e.g. 34"
             error={errors.age?.message}
             {...register("age")}
           />
           <div>
-            <p className="text-sm font-semibold text-dash-text mb-1.5">Gender</p>
+            <p className="text-sm font-semibold text-dash-text mb-1.5">
+              Gender <span className="text-destructive">*</span>
+            </p>
             <div className="flex gap-2">
               {(["M", "F", "Other"] as const).map((g) => (
                 <button
@@ -196,6 +243,9 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
                 </button>
               ))}
             </div>
+            {errors.sex?.message && (
+              <p className="text-xs text-destructive mt-1.5">{errors.sex.message}</p>
+            )}
           </div>
         </div>
 
@@ -206,13 +256,11 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
             render={({ field }) => (
               <FormSelect
                 label="Blood Group"
+                required
                 placeholder="Select blood group"
                 value={field.value ?? NONE}
                 onValueChange={(v) => field.onChange(v === NONE ? null : v)}
-                options={[
-                  { value: NONE, label: "Unknown" },
-                  ...BLOOD_GROUPS.map((b) => ({ value: b, label: b })),
-                ]}
+                options={BLOOD_GROUPS.map((b) => ({ value: b, label: b }))}
                 error={errors.blood_group?.message}
               />
             )}
@@ -224,6 +272,14 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
             {...register("city")}
           />
         </div>
+
+        <FormInput
+          label="Guardian Name"
+          placeholder="For minors — parent / guardian name (optional)"
+          hint="Fill in when the contact number belongs to a parent or guardian"
+          error={errors.guardian_name?.message}
+          {...register("guardian_name")}
+        />
 
         <FormInput
           label="Insurance / Payer"
@@ -254,12 +310,8 @@ export function PatientForm({ patient, onClose, onSaved }: PatientFormProps) {
         </Button>
         <Button type="submit" disabled={action.pending}>
           {action.pending
-            ? isEdit
-              ? "Saving…"
-              : "Registering…"
-            : isEdit
-              ? "Save changes"
-              : "Register Patient"}
+            ? (submitPendingLabel ?? (isEdit ? "Saving…" : "Registering…"))
+            : (submitLabel ?? (isEdit ? "Save changes" : "Register Patient"))}
         </Button>
       </footer>
     </form>

@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
 import { Plus, Edit2, Trash2 } from "lucide-react";
 import { DashCard } from "@/components/dashboard/ui/dash-card";
 import { PageHeader } from "@/components/dashboard/ui/page-header";
@@ -9,17 +8,27 @@ import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { ActionBtn } from "@/components/dashboard/ui/action-btn";
 import { MiniStatCard } from "@/components/dashboard/ui/mini-stat-card";
 import { FilterBar, ChipRow, ClearBtn } from "@/components/dashboard/ui/filter-bar";
+import { TableSearch } from "@/components/dashboard/ui/table-search";
+import { Pagination } from "@/components/dashboard/ui/pagination";
+import { useTableQuery } from "@/hooks/use-table-query";
 import { DataTable, type ColumnDef } from "@/components/dashboard/data-table";
 import { DepartmentPanel } from "@/components/forms/department-panel";
 import { ConfirmDialog } from "@/components/dashboard/confirm-dialog";
-import { useResourceTable } from "@/hooks/use-resource-table";
 import { useServerAction } from "@/hooks/use-server-action";
 import { deleteDepartment } from "@/lib/actions/departments";
 import { cn } from "@/lib/utils";
 import type { DepartmentWithDetails } from "@/types/database";
 
+type DepartmentStats = { total: number; active: number; inactive: number };
+
 interface Props {
   departments: DepartmentWithDetails[];
+  total: number;
+  page: number;
+  pageSize: number;
+  search: string;
+  status: string;
+  stats: DepartmentStats;
 }
 
 const STATUS_CHIPS = [
@@ -28,33 +37,20 @@ const STATUS_CHIPS = [
   { value: "inactive", label: "Inactive" },
 ];
 
-export function DepartmentsBoard({ departments }: Props) {
+export function DepartmentsBoard({
+  departments,
+  total,
+  page,
+  pageSize,
+  status,
+  stats,
+}: Props) {
+  const { get, setParams } = useTableQuery();
   const [panelOpen, setPanelOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<DepartmentWithDetails | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<DepartmentWithDetails | null>(null);
 
-  const {
-    search,
-    setSearch,
-    filters,
-    setFilter,
-    filtered,
-  } = useResourceTable<DepartmentWithDetails>({
-    rows: departments,
-    searchKeys: ["name", "slug"],
-    filterFn: (row, f) => {
-      if (f.status === "active" && !row.is_active) return false;
-      if (f.status === "inactive" && row.is_active) return false;
-      return true;
-    },
-    pageSize: 100,
-  });
-
-  const counts = {
-    total: departments.length,
-    active: departments.filter((d) => d.is_active).length,
-    inactive: departments.filter((d) => !d.is_active).length,
-  };
+  const counts = stats;
 
   const deleteAction = useServerAction(deleteDepartment, {
     successMessage: "Department deleted",
@@ -66,14 +62,10 @@ export function DepartmentsBoard({ departments }: Props) {
     setPanelOpen(true);
   }
 
-  // Deep-link support: ?q= prefills search, ?action=new opens the add panel.
-  const searchParams = useSearchParams();
+  // ?action=new opens the add panel (e.g. from command search).
   React.useEffect(() => {
-    const q = searchParams.get("q");
-    if (q) setSearch(q);
-    if (searchParams.get("action") === "new") openCreate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+    if (get("action") === "new") openCreate();
+  }, [get]);
 
   function openEdit(d: DepartmentWithDetails) {
     setEditing(d);
@@ -200,36 +192,31 @@ export function DepartmentsBoard({ departments }: Props) {
       <FilterBar>
         <ChipRow
           options={STATUS_CHIPS}
-          value={(filters.status as string) ?? "all"}
-          onChange={(v) => setFilter("status", v === "all" ? null : v)}
+          value={status}
+          onChange={(v) => setParams({ status: v === "all" ? null : v })}
         />
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search departments…"
-          className="h-[38px] px-3 rounded-lg border border-dash-border bg-dash-surface text-[13px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal min-w-[180px] transition-all"
-        />
+        <TableSearch placeholder="Search departments…" />
         <ClearBtn
-          onClick={() => {
-            setFilter("status", null);
-            setSearch("");
-          }}
+          show={["status", "q"].some((k) => get(k))}
+          onClick={() => setParams({ status: null, q: null })}
         />
       </FilterBar>
 
       <DashCard noPad>
         <DataTable
           columns={columns}
-          rows={filtered}
+          rows={departments}
           rowKey={(r) => r.id}
           onRowClick={openEdit}
           empty={
-            departments.length === 0
+            counts.total === 0
               ? "No departments yet. Click Add Department to create the first one."
               : "No departments match the current filters."
           }
         />
       </DashCard>
+
+      <Pagination page={page} pageSize={pageSize} total={total} />
 
       <DepartmentPanel
         open={panelOpen}

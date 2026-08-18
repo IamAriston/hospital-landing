@@ -7,7 +7,7 @@ import { FormTextarea } from "@/components/ui/form-textarea";
 import { useServerAction } from "@/hooks/use-server-action";
 import {
   createWalkInAppointment,
-  lookupPatientByPhone,
+  lookupPatientsByPhone,
 } from "@/lib/actions/appointments";
 import {
   walkInAppointmentSchema,
@@ -76,19 +76,30 @@ export function WalkInAppointmentForm({
     },
   });
 
+  const [candidates, setCandidates] = React.useState<PatientRow[]>([]);
   const [matchedPatient, setMatchedPatient] = React.useState<PatientRow | null>(null);
   const phone = watch("patient_phone");
   const departmentId = watch("department_id");
 
-  const lookupAction = useServerAction(lookupPatientByPhone, {
+  const selectPatient = React.useCallback(
+    (p: PatientRow) => {
+      setMatchedPatient(p);
+      setValue("patient_id", p.id, { shouldValidate: false });
+      setValue("patient_name", p.name, { shouldValidate: true });
+      if (p.email) setValue("patient_email", p.email);
+    },
+    [setValue],
+  );
+
+  const lookupAction = useServerAction(lookupPatientsByPhone, {
     successMessage: false,
     errorMessage: "Lookup failed",
-    onSuccess: (data) => {
-      if (data) {
-        setMatchedPatient(data);
-        setValue("patient_id", data.id, { shouldValidate: false });
-        setValue("patient_name", data.name, { shouldValidate: true });
-        if (data.email) setValue("patient_email", data.email);
+    onSuccess: (list) => {
+      setCandidates(list);
+      // Exactly one person on the number → auto-select. Several (a family) →
+      // let staff pick which one; none → new patient.
+      if (list.length === 1) {
+        selectPatient(list[0]!);
       } else {
         setMatchedPatient(null);
         setValue("patient_id", null);
@@ -119,6 +130,7 @@ export function WalkInAppointmentForm({
 
   function clearMatch() {
     setMatchedPatient(null);
+    setCandidates([]);
     setValue("patient_id", null);
   }
 
@@ -172,6 +184,31 @@ export function WalkInAppointmentForm({
               {lookupAction.pending ? "…" : "Find"}
             </button>
           </div>
+
+          {!matchedPatient && candidates.length > 1 && (
+            <div className="mb-3 p-3 bg-sky-50 border border-sky-100 rounded-md dark:bg-sky-900/20 dark:border-sky-800/40">
+              <div className="text-xs font-semibold text-sky-900 dark:text-sky-200 mb-2">
+                {candidates.length} patients registered on this number — pick one:
+              </div>
+              <div className="flex flex-col gap-1.5">
+                {candidates.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => selectPatient(c)}
+                    className="flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-md border border-sky-200 bg-white text-left text-sm hover:bg-sky-50 dark:border-sky-800/50 dark:bg-transparent dark:hover:bg-sky-900/30"
+                  >
+                    <span className="font-medium text-dash-text">{c.name}</span>
+                    <span className="text-xs text-dash-text-mute">
+                      {[c.age != null ? `${c.age} yrs` : null, c.sex]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {matchedPatient && (
             <div className="mb-3 flex items-start gap-2 p-3 bg-green-50 border border-green-100 rounded-md text-sm dark:bg-green-900/20 dark:border-green-800/40">

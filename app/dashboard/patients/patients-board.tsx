@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import {
   Plus,
   X,
@@ -16,12 +16,17 @@ import { DashAvatar } from "@/components/dashboard/ui/dash-avatar";
 import { ActionBtn } from "@/components/dashboard/ui/action-btn";
 import { RefreshButton } from "@/components/dashboard/ui/refresh-button";
 import { FilterBar, ChipRow } from "@/components/dashboard/ui/filter-bar";
+import { StatusBadge } from "@/components/dashboard/ui/status-badge";
+import { TableSearch } from "@/components/dashboard/ui/table-search";
+import { Pagination } from "@/components/dashboard/ui/pagination";
+import { useTableQuery } from "@/hooks/use-table-query";
 import { PatientPanel } from "@/components/forms/patient-form";
 import { ConfirmDialog } from "@/components/dashboard/confirm-dialog";
 import { useServerAction } from "@/hooks/use-server-action";
 import { deletePatient } from "@/lib/actions/patients";
+import { listPatientAppointments } from "@/lib/actions/appointments";
 import { cn } from "@/lib/utils";
-import type { PatientRow } from "@/types/database";
+import type { AppointmentWithRelations, PatientRow } from "@/types/database";
 
 const GENDER_CHIPS = [
   { value: "all", label: "All" },
@@ -97,6 +102,7 @@ function PatientDrawer({
             { label: "City", value: p.city ?? "—" },
             { label: "Phone", value: p.phone, mono: true },
             { label: "Email", value: p.email ?? "—" },
+            { label: "Guardian", value: p.guardian_name ?? "—" },
             { label: "Insurance", value: p.insurance ?? "—" },
             { label: "Registered", value: formatDate(p.created_at) },
           ].map(({ label, value, mono }) => (
@@ -132,48 +138,110 @@ function PatientDrawer({
             <p className="text-[13px] text-dash-text-dim leading-relaxed">{p.notes}</p>
           </>
         )}
+
+        {/* keyed by patient id so it remounts (and reloads) per selection */}
+        <AppointmentHistory key={p.id} patientId={p.id} />
       </div>
     </DashCard>
   );
 }
 
-export function PatientsBoard({ patients }: { patients: PatientRow[] }) {
-  const [selected, setSelected] = React.useState<PatientRow | null>(null);
-  const [search, setSearch] = React.useState("");
-  const [genderFilter, setGenderFilter] = React.useState("all");
+function AppointmentLine({ a }: { a: AppointmentWithRelations }) {
+  return (
+    <div className="flex items-center gap-2.5 py-1.5 px-2.5 rounded-lg bg-dash-surface-3 border border-dash-border">
+      <div className="font-mono text-[12.5px] font-bold text-dash-text w-[52px] shrink-0">
+        {a.preferred_date ? formatDate(a.preferred_date).replace(/ \d{4}$/, "") : "—"}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="text-[12.5px] text-dash-text truncate">
+          {a.doctors?.name ?? "Any doctor"}
+          {a.departments?.name ? ` · ${a.departments.name}` : ""}
+        </div>
+      </div>
+      <StatusBadge status={a.status} small />
+    </div>
+  );
+}
+
+function AppointmentHistory({ patientId }: { patientId: string }) {
+  const [rows, setRows] = React.useState<AppointmentWithRelations[] | null>(null);
+  const { run, pending } = useServerAction(listPatientAppointments, {
+    successMessage: false,
+    onSuccess: (data) => setRows(data),
+  });
+
+  React.useEffect(() => {
+    run(patientId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patientId]);
+
+  const hasRows = rows && rows.length > 0;
+
+  return (
+    <div className="mt-4 pt-4 border-t border-dash-border">
+      <div className="flex items-center justify-between mb-2">
+        <h4 className="text-[11.5px] uppercase tracking-[.1em] text-dash-text-mute font-bold">
+          Last Appointment
+        </h4>
+        {hasRows && (
+          <Link
+            href={`/dashboard/appointments?patient=${patientId}`}
+            className="inline-flex items-center gap-1 text-[12px] font-semibold text-brand-teal hover:underline"
+          >
+            View all
+            {rows!.length > 1 ? ` (${rows!.length})` : ""}
+            <ChevronRight size={13} />
+          </Link>
+        )}
+      </div>
+      {pending && rows === null ? (
+        <p className="text-[12.5px] text-dash-text-mute">Loading…</p>
+      ) : hasRows ? (
+        <AppointmentLine a={rows![0]} />
+      ) : (
+        <p className="text-[12.5px] text-dash-text-mute">No appointments on record.</p>
+      )}
+    </div>
+  );
+}
+
+interface PatientsBoardProps {
+  patients: PatientRow[];
+  total: number;
+  page: number;
+  pageSize: number;
+  search: string;
+  sex: string;
+  initialSelected: PatientRow | null;
+}
+
+export function PatientsBoard({
+  patients,
+  total,
+  page,
+  pageSize,
+  sex,
+  initialSelected,
+}: PatientsBoardProps) {
+  const { get, setParams } = useTableQuery();
+  const [selected, setSelected] = React.useState<PatientRow | null>(initialSelected);
   const [panelOpen, setPanelOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<PatientRow | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<PatientRow | null>(null);
 
-  // Deep-link support: ?q= prefills search, ?action=new opens the register panel.
-  const searchParams = useSearchParams();
+  // ?action=new opens the register panel (e.g. from command search).
   React.useEffect(() => {
-    const q = searchParams.get("q");
-    if (q) setSearch(q);
-    if (searchParams.get("action") === "new") {
+    if (get("action") === "new") {
       setEditing(null);
       setPanelOpen(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-
-  const term = search.toLowerCase();
-  const filtered = patients.filter((p) => {
-    if (genderFilter !== "all" && p.sex !== genderFilter) return false;
-    if (!term) return true;
-    return (
-      p.name.toLowerCase().includes(term) ||
-      p.phone.includes(term) ||
-      (p.city ?? "").toLowerCase().includes(term) ||
-      (p.email ?? "").toLowerCase().includes(term)
-    );
-  });
+  }, [get]);
 
   const deleteAction = useServerAction(deletePatient, {
     successMessage: "Patient deleted",
     onSuccess: () => {
       setConfirmDelete(null);
-      setSelected(null);
+      closeDrawer();
     },
   });
 
@@ -187,11 +255,16 @@ export function PatientsBoard({ patients }: { patients: PatientRow[] }) {
     setPanelOpen(true);
   }
 
+  function closeDrawer() {
+    setSelected(null);
+    if (get("patient")) setParams({ patient: null }, { resetPage: false });
+  }
+
   return (
     <div className="p-7 pb-16">
       <PageHeader
         title="Patient Records"
-        subtitle={`${filtered.length} of ${patients.length} patients · search by name, phone, city or email`}
+        subtitle={`${total} patient${total !== 1 ? "s" : ""} · search by name, phone, city or email`}
         actions={
           <>
             <RefreshButton />
@@ -207,27 +280,12 @@ export function PatientsBoard({ patients }: { patients: PatientRow[] }) {
       />
 
       <FilterBar>
-        <div className="relative flex-1 min-w-[240px] max-w-[480px]">
-          <svg
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-dash-text-mute pointer-events-none"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.35-4.35" />
-          </svg>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name, phone, city, email…"
-            className="w-full pl-9 pr-3.5 py-2 border border-dash-border rounded-xl bg-dash-surface text-[14px] text-dash-text placeholder:text-dash-text-mute outline-none focus:border-brand-teal transition-all"
-          />
-        </div>
-        <ChipRow options={GENDER_CHIPS} value={genderFilter} onChange={setGenderFilter} />
+        <TableSearch placeholder="Search name, phone, city, email…" />
+        <ChipRow
+          options={GENDER_CHIPS}
+          value={sex}
+          onChange={(v) => setParams({ sex: v === "all" ? null : v })}
+        />
       </FilterBar>
 
       <div className={cn("grid gap-[18px]", selected ? "grid-cols-[1fr_360px]" : "grid-cols-1")}>
@@ -248,7 +306,7 @@ export function PatientsBoard({ patients }: { patients: PatientRow[] }) {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((p) => (
+              {patients.map((p) => (
                 <tr
                   key={p.id}
                   className={cn(
@@ -293,14 +351,14 @@ export function PatientsBoard({ patients }: { patients: PatientRow[] }) {
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && (
+              {patients.length === 0 && (
                 <tr>
                   <td
                     colSpan={8}
                     className="px-5 py-12 text-center text-dash-text-mute text-sm"
                   >
-                    {patients.length === 0
-                      ? "No patients yet. Click Register Patient to add the first one."
+                    {total === 0
+                      ? "No patients found. Click Register Patient to add one."
                       : "No patients match your search."}
                   </td>
                 </tr>
@@ -312,12 +370,14 @@ export function PatientsBoard({ patients }: { patients: PatientRow[] }) {
         {selected && (
           <PatientDrawer
             p={selected}
-            onClose={() => setSelected(null)}
+            onClose={closeDrawer}
             onEdit={() => openEdit(selected)}
             onDelete={() => setConfirmDelete(selected)}
           />
         )}
       </div>
+
+      <Pagination page={page} pageSize={pageSize} total={total} />
 
       <PatientPanel
         open={panelOpen}

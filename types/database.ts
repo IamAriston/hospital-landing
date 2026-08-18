@@ -156,6 +156,7 @@ export type PatientRow = {
   insurance: string | null;
   allergies: string | null;
   notes: string | null;
+  guardian_name: string | null;
   created_at: string;
   updated_at: string;
 };

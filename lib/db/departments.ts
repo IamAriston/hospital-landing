@@ -2,12 +2,73 @@ import "server-only";
 import { cache } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { rangeFor, sanitizeSearch, type Paginated } from "@/lib/db/paginate";
 import type {
   DepartmentRow,
   DepartmentWithDetails,
 } from "@/types/database";
 
 export const CACHE_TAG_DEPARTMENTS = "departments";
+
+export type DepartmentStatusFilter = "active" | "inactive";
+
+export type ListDepartmentsAdminOpts = {
+  search?: string; // matches name / slug
+  status?: DepartmentStatusFilter;
+  page?: number;
+  pageSize?: number;
+};
+
+/** Normalise Supabase's one-to-one join (object | array | null) to a single row. */
+function pickDetails(row: unknown): DepartmentWithDetails {
+  const detRaw = (row as { department_details: unknown }).department_details;
+  const details = Array.isArray(detRaw) ? detRaw[0] ?? null : detRaw ?? null;
+  return {
+    ...(row as Omit<DepartmentWithDetails, "department_details">),
+    department_details: details,
+  } as DepartmentWithDetails;
+}
+
+/** Server-paginated admin department list with count + details join. */
+export const listDepartmentsAdmin = cache(
+  async (opts: ListDepartmentsAdminOpts = {}): Promise<Paginated<DepartmentWithDetails>> => {
+    const page = opts.page ?? 1;
+    const pageSize = opts.pageSize ?? 10;
+    const supabase = createAdminClient();
+
+    let q = supabase
+      .from("departments")
+      .select("*, department_details(*)", { count: "exact" })
+      .order("display_order", { ascending: true });
+
+    const search = sanitizeSearch(opts.search);
+    if (search) q = q.or(`name.ilike.%${search}%,slug.ilike.%${search}%`);
+    if (opts.status === "active") q = q.eq("is_active", true);
+    else if (opts.status === "inactive") q = q.eq("is_active", false);
+
+    const { from, to } = rangeFor(page, pageSize);
+    const { data, error, count } = await q.range(from, to);
+    if (error) throw new Error(`listDepartmentsAdmin: ${error.message}`);
+    return {
+      rows: (data ?? []).map(pickDetails),
+      total: count ?? 0,
+      page,
+      pageSize,
+    };
+  },
+);
+
+/** Global department counts for the mini-stat cards (unaffected by paging). */
+export const getDepartmentStats = cache(async () => {
+  const supabase = createAdminClient();
+  const [{ count: total }, { count: active }] = await Promise.all([
+    supabase.from("departments").select("id", { count: "exact", head: true }),
+    supabase.from("departments").select("id", { count: "exact", head: true }).eq("is_active", true),
+  ]);
+  const t = total ?? 0;
+  const a = active ?? 0;
+  return { total: t, active: a, inactive: t - a };
+});
 
 export const getDepartments = cache(async (): Promise<DepartmentRow[]> => {
   const supabase = createPublicClient();
